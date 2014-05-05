@@ -1,0 +1,191 @@
+#content-frame {
+  background-color: #FCFEFF;
+}
+
+#content {
+  font-size: 14px;
+  font-family: Arial,​ Liberation Sans,​ DejaVu Sans,​ Sans, sans-serif;
+}
+
+#content * {
+  vertical-align: baseline;
+}
+
+/*================================================================
+  Blocks */
+
+#content h1, #content h2, #content h3, #content h4,
+#content p, #content pre, #content .table-wrapper,
+#content ul, #content ol, #content dl {
+  margin: 1em 15px
+}
+
+#content img {
+  display: block;
+  margin: 1em auto;
+  color: red;
+}
+
+#content h1 {
+  font-size: 1.5em;
+  font-weight: bold;
+  background-color: #AEE;
+  text-align: center;
+  border: 1px solid #7BB;
+  padding: 5px;
+  margin: 0.8em 15px;
+}
+
+#content h2 {
+  font-size: 1.2em;
+  line-height: 1.2em;
+  font-weight: bold;
+}
+
+#content h3 {
+  font-size: 1.0em;
+  font-weight: bold;
+  font-style: italic;
+}
+
+#content p, #content li {
+  line-height: 20px;
+}
+
+#content blockquote {
+  margin: 0 15px;
+  padding-left: 10px;
+  border-left: 2px solid #AAA;
+  background-color: rgba(210, 240, 240, 0.25);
+}
+
+#content blockquote p {
+  margin: 0.5em 15px;
+}
+
+#content blockquote blockquote {
+  margin-right: 0;
+}
+
+#content blockquote li blockquote {
+  margin-left: 0;
+}
+
+/*================================================================
+  Texts */
+
+#content em {
+  font-style: italic;
+}
+
+#content strong {
+  font-weight: bold;
+}
+
+#content strong em {
+  background-color: #CEE;
+  border: 1px solid #ADD;
+  font-style: normal;
+  padding: 2px 3px;
+}
+
+#content code, #content tt, #content pre {
+  background-color: #EEE;
+  font-size: 100%;
+  font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;
+  line-height: 1.4;
+}
+
+#content sub, #content sup {
+  font-size: smaller;
+  line-height: normal;
+}
+
+#content sub {vertical-align: sub;}
+#content sup {vertical-align: super;}
+
+/*================================================================
+  Lists */
+
+#content ul, #content ol, #content dl {
+  margin-left: 40px;
+}
+
+#content ul ul, #content ul ol, #content ol ul, #content ol ol {
+  margin: 0 0 0 20px;
+}
+
+#content blockquote ul, #content blockquote ol {
+  margin: 0 0 0 20px;
+}
+
+#content ul {list-style-type: disc;}
+#content ul ul {list-style-type: circle;}
+#content ul ul ul {list-style-type: square;}
+
+#content ol {list-style-type: decimal;}
+#content ol ol {list-style-type: lower-latin;}
+#content ol ol ol {list-style-type: lower-roman;}
+
+#content li {
+  display: list-item;
+  margin: 0.5em 0;
+}
+
+#content li p {
+  margin: 0.5em 0;
+}
+
+#content dt {
+  font-weight: bold;
+  margin: 0.67em 0 0 0;
+}
+
+#content dd {
+  margin: 0.67em 0 0 30px;
+}
+
+/*================================================================
+  Tables */
+
+#content table {
+  display: table;
+  border-collapse: collapse;
+  margin: 1em auto;
+}
+
+#content tr {
+  display: table-row;
+}
+
+#content td, #content th { 
+  display: table-cell;
+  padding: 3px;
+  border: 1px solid #BBA;
+}
+
+#content th {
+  font-weight: bold;
+  background-color: #79B;
+  color: white;
+}
+
+#content tr {
+  background-color: #FFF;
+}
+#content tr:nth-child(odd) {
+  background-color: #EFF;
+}
+
+/*================================================================
+  SVG */
+
+svg {
+  display: block;
+  margin: 0 auto;
+  border: 1px solid transparent;
+}
+
+svg:hover {
+  border: 1px solid #EEE;
+}
