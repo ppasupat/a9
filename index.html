@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="shortcut icon" href="/static/favicon-pad.ico" />
+  <link rel="stylesheet" type="text/css" href="/static/reset.css" />
+  <link rel="stylesheet" type="text/css" href="/static/jquery-ui.min.css" />
+  <link rel="stylesheet" type="text/css" href="/static/codemirror/codemirror.css" />
+  <link rel="stylesheet" type="text/css" href="/static/codemirror/show-hint.css" />
+  <link rel="stylesheet" type="text/css" href="/static/style.css" />
+  <link rel="stylesheet" type="text/css" href="/static/content-style.css" />
+  <link rel="stylesheet" type="text/css" href="/static/print-style.css" media="print" />
+  <script type="text/javascript" src="/static/jquery.min.js"></script>
+  <script type="text/javascript" src="/static/jquery-ui.min.js"></script>
+  <script type="text/javascript" src="/static/codemirror/codemirror.js"></script>
+  <script type="text/javascript" src="/static/codemirror/xml.js"></script>
+  <script type="text/javascript" src="/static/codemirror/stex.js"></script>
+  <script type="text/javascript" src="/static/codemirror/markdown-custom.js"></script>
+  <script type="text/javascript" src="/static/codemirror/matchbrackets.js"></script>
+  <script type="text/javascript" src="/static/codemirror/show-hint.js"></script>
+  <script type="text/javascript" src="/static/codemirror/anyword-hint.js"></script>
+  <script type="text/javascript" src="/static/svg-hack.js"></script>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      config: ["MMLorHTML.js", "local.js"],
+      jax: ["input/TeX", "output/HTML-CSS", "output/NativeMML"],
+      extensions: ["tex2jax.js"],
+      "HTML-CSS": {
+        scale: 90,
+        availableFonts: ["TeX"],
+        preferredFont: "TeX",
+        webFont: "TeX"
+      },
+      TeX: {
+        extensions: ["AMSmath.js", "AMSsymbols.js",
+                     "noErrors.js", "noUndefined.js"]
+      },
+      tex2jax: {
+        inlineMath: [['$','$']],
+        displayMath: [['$$','$$']],
+      }
+    });
+  </script>
+  <script type="text/javascript" src="/static/mathjax/MathJax.js"></script>
+  <script type="text/javascript" src="/static/main.js"></script>
+  <title>r9</title>
+</head>
+
+<body>
+  <div id="wrapper">
+    <div id="sidebar-wrapper" class="column-wrapper">
+      <div id="booklist-wrapper" class="row-wrapper">
+        <div id="booklist-inner-wrapper" class="inner-wrapper">
+          <div id="booklist-toolbar" class="list-toolbar">
+            <button id="book-add">Add</button>
+            <button id="book-rename">Rename</button>
+            <button id="book-delete">Delete</button>
+            <span class="list-toolbar-title">BOOKS</span>
+          </div>
+          <div id="booklist" class="list">
+            
+          </div>
+        </div>
+      </div>
+      <div id="notelist-wrapper" class="row-wrapper">
+        <div id="notelist-inner-wrapper" class="inner-wrapper">
+          <div id="notelist-toolbar" class="list-toolbar">
+            <button id="note-add">Add</button>
+            <button id="note-rename">Rename</button>
+            <button id="note-delete">Delete</button>
+            <span class="list-toolbar-title">NOTES</span>
+          </div>
+          <div id="notelist" class="list">
+            
+          </div>
+        </div>
+      </div>
+    </div> <!-- #sidebar-wrapper -->
+    <div id="sidebar-toggler" class="column-wrapper"></div>
+    <div id="content-wrapper" class="column-wrapper">
+      <div id="content-name-wrapper">
+        <div id="content-name" class="cutoff"></div>
+      </div>
+      <div id="content-lower-wrapper" class="lower-wrapper">
+        <div id="content-frame">
+          <div id="content"></div>
+        </div>
+      </div>
+    </div> <!-- #content-wrapper -->
+    <div id="editor-wrapper" class="column-wrapper">
+      <div id="editor-toolbar-wrapper">
+        <div id="editor-toolbar">
+          <button id="editor-save">Save</button>
+          <span id="message"></span>
+        </div>
+      </div>
+      <div id="editor-lower-wrapper" class="lower-wrapper">
+        <!-- Editor will be here -->
+      </div>
+    </div> <!-- #editor-wrapper -->
+    <div id="cover" class="column-wrapper hidden unselectable">
+      <div id="nonote" class="centerize">(no note selected)</div>
+      <div id="loading" class="centerize">... loading ...</div>
+    </div>
+    <div id="error" class="ui-state-error ui-corner-all hidden"> 
+      <p>
+        <span class="ui-icon ui-icon-alert"></span>
+        <strong>ERROR:</strong> <span id="error-message"></span>
+      </p>
+    </div>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,272 @@
+/*================================================================
+  Reset */
+
+body {
+  position: absolute;
+  font-family: Arial, Liberation Sans, DejaVu Sans, Sans, sans-serif;
+  width: 100%;
+}
+
+body, #cover {
+  background-color: #E5E5E5;
+}
+
+/*================================================================
+  Common Formatting */
+
+.hidden {display: none;}
+.selected {background-color: #DEF;}
+.centerize {text-align: center; margin: 0 auto;}
+.cutoff {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+.unselectable {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: default;
+}
+strong {font-weight: bold;}
+
+/*================================================================
+  Layout */
+
+.column-wrapper .row-wrapper {
+  top: 0;
+  border: none;
+}
+
+.column-wrapper {
+  position: fixed;
+  height: 100%;
+}
+
+.row-wrapper {
+  position: absolute;
+  width: 100%;
+}
+
+.inner-wrapper {
+  position: relative;
+  margin: 8px;
+}
+
+.lower-wrapper {
+  position: relative;
+  padding: 2px;
+}
+
+#sidebar-wrapper {
+  left: 0;
+  width: 16%;
+}
+
+#sidebar-toggler {
+  left: 16%;
+  left: calc(16% - 8px);
+  width: 10px;
+}
+
+#sidebar-toggler:hover {
+  cursor: pointer;
+  background-color: #AAA;
+}
+
+#content-wrapper {
+  left: 16%;
+  width: 42%;
+}
+
+#editor-wrapper {
+  left: 58%;
+  width: 42%;
+}
+
+.hide-sidebar #sidebar-wrapper {
+  display: none;
+}
+
+.hide-sidebar #sidebar-toggler {
+  left: 0;
+}
+
+.hide-sidebar #content-wrapper {
+  left: 10px;
+  width: 50%;
+  width: calc(50% - 10px);
+}
+
+.hide-sidebar #editor-wrapper {
+  left: 50%;
+  width: 50%;
+}
+
+#booklist-wrapper {
+  top: 0;
+  height: 40%;
+}
+
+#notelist-wrapper {
+  top: 40%;
+  height: 60%;
+}
+
+/*================================================================
+  Sidebar */
+
+.list {
+  border: 1px solid #DDD;
+  cursor: default;
+  overflow-y: auto;
+  font-size: 90%;
+  background-color: #FCFEFF;
+}
+
+.choice {
+  height: 1em;
+  padding: 2px;
+}
+
+.list-toolbar {
+  height: 2em;
+}
+
+.list-toolbar .ui-button {
+  font-size: 10px;
+}
+
+.list-toolbar-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #555;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: -1;
+}
+
+/*================================================================
+  Content */
+
+#content-name-wrapper {
+  height: 40px;
+}
+
+#content-name {
+  font-size: 20px;
+  padding: 10px;
+  color: #606;
+  font-weight: bold;
+}
+
+#content-frame {
+  border: 1px solid #DDD;
+  overflow-y: scroll;
+}
+
+/*================================================================
+  Edit Pane */
+
+#editor-toolbar-wrapper {
+  height: 30px;
+}
+
+#editor-toolbar{
+  padding: 5px;
+}
+
+#editor-toolbar .ui-button {
+  font-size: 14px;
+}
+
+#editor-toolbar .ui-button-text {
+  padding: 3px 5px;
+}
+
+#editor-lower-wrapper {
+  margin-right: 5px;
+  margin-top: 5px;
+}
+
+.CodeMirror {
+  font-family: monospace;
+  background-color: #FCFEFF;
+}
+
+/*================================================================
+  Misc. */
+
+#cover {
+  left: 16%;
+  width: 84%;
+  z-index: 5;
+}
+
+#cover div {
+  margin: 2em;
+  margin-top: 3em;
+  font-size: 3em;
+  color: #AAA;
+}
+
+#cover #nonote {display: block;}
+#cover.loading #nonote {display: none;}
+#cover #loading {display: none;}
+#cover.loading #loading {display: block;}
+
+#message {
+  float: right;
+  color: #046;
+  margin: 3px;
+}
+
+#error {
+  position: fixed;
+  padding: 20px;
+  margin-top: 3em;
+  margin-left: -210px;
+  width: 400px;
+  left: 50%;
+  z-index: 7;
+}
+
+#error .ui-icon {
+  float: left;
+  margin-right: 0.5em;
+}
+
+.ui-dialog {
+  font-size: 90%;
+}
+
+.ui-dialog .ui-dialog-buttonpane {
+  margin: 0;
+  padding: 0;
+}
+
+.ui-dialog .ui-button-text {
+  padding: 0.3em 0.5em;
+}
+
+.ui-dialog img {
+  float: left;
+  margin: 0;
+  padding: 0;
+}
+
+.ui-dialog .right-pane {
+  margin-left: 80px;
+}
+
+.ui-dialog .right-pane p, .ui-dialog .right-pane input {
+  margin: 0.3em 0;
+}
+
+.ui-dialog input {
+  width: 100%;
+}
+
+.ui-state-default, .ui-state-hover {
+  border: none !important;
+}
