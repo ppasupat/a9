@@ -14,7 +14,7 @@ With r9, you can ...
 * organize documents into "books" like in [Evernote](https://evernote.com/)
 * print the documents in full-page format
 * insert LaTeX formula using `$..$` and `$$..$$` — the equations will be displayed using [MathJax](http://www.mathjax.org/)
-* draw simple graphics (like graphical models) with `<svg>` tags (to be documented)
+* draw simple graphics (like graphical models) with special SVG hacks (to be documented)
 
 The documents are saved locally.
 To sync or backup the documents, use [an existing sync or backup service](http://alternativeto.net/category/backup-and-sync/).
