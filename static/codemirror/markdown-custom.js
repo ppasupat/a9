@@ -170,11 +170,11 @@ CodeMirror.defineMode("markdown", function(cmCfg, modeCfg) {
 
   function htmlBlock(stream, state) {
     var style = htmlMode.token(stream, state.htmlState);
-    if (htmlFound && style === 'tag' && state.htmlState.type !== 'openTag' && !state.htmlState.context) {
+    if (htmlFound && state.htmlState.tagStart === null && !state.htmlState.context) {
       state.f = inlineNormal;
       state.block = blockNormal;
     }
-    if (state.md_inside && stream.current().indexOf(">")!=-1) {
+    if (state.md_inside && stream.current().indexOf(">") != -1) {
       state.f = inlineNormal;
       state.block = blockNormal;
       state.htmlState.context = undefined;
@@ -243,7 +243,7 @@ CodeMirror.defineMode("markdown", function(cmCfg, modeCfg) {
     var style = state.text(stream, state);
     if (typeof style !== 'undefined')
       return style;
-
+    
     if (state.list) { // List marker (*, +, -, 1., etc)
       state.list = null;
       return getType(state);
@@ -566,7 +566,8 @@ CodeMirror.defineMode("markdown", function(cmCfg, modeCfg) {
         state.indentation = adjustedIndentation;
         if (indentation > 0) return null;
       }
-      return state.f(stream, state);
+      var result = state.f(stream, state);
+      return (stream.start == stream.pos) ? this.token(stream, state) : result;
     },
 
     blankLine: blankLine,
