@@ -21,34 +21,36 @@ window.SVGHack = (function () {
     NE: [ 1, -1], UR: [ 1, -1],
     NW: [-1, -1], UL: [-1, -1],
     SE: [ 1,  1], DR: [ 1,  1],
-    SW: [-1,  1], DL: [-1,  1],
+    SW: [-1,  1], DL: [-1,  1]
   };
 
+  /** Generate a tag in SVG namespace */
   function S(tag, attr) {
     return $(document.createElementNS(
       "http://www.w3.org/2000/svg", tag.replace(/[<>]/g, '')))
       .attr(attr || {});
   }
 
-  /*
-   Syntax:
-   (1) refName step1 step2 ...
-   - refName = name of node
-   - step:
-   - (optional size +) N S E W U D L R
-   - (optional size +) NE NW SE SW UR UL DR DL
-   (2) X Y
+  /** Parse the location string
+
+   Syntax: one of the following
+   (1) x y
+   (2) refName step1 step2 ...
+       - refName = name of node
+       - step:
+         > (optional size +) N S E W U D L R
+         > (optional size +) NE NW SE SW UR UL DR DL
    
-   Return:
+   Return: an object with fields
    - x, y
    - ref (reference node or null)
-   - isRef (whether (x,y) is the coord of ref)
+   - isRef (whether (x,y) is the coordinate of ref)
 
    TODO: Take rotation / scaling into account
    */
   function parseLocation(spec, parentNode, nodes) {
     var tokens = spec.split(/\s+/), refName = tokens[0], answer;
-    // Coordinate: X Y
+    // Simple coordinate: x y
     if (tokens.length == 2 && $.isNumeric(tokens[0]) && $.isNumeric(tokens[1])) {
       return {x: +tokens[0], y: +tokens[1], ref: null, isRef: false};
     }
@@ -83,7 +85,7 @@ window.SVGHack = (function () {
     return answer;
   }
 
-  // Parse the alignment
+  /** Parse the alignment string */
   function parseAlign(text) {
     var hAlign = 'center', vAlign = 'middle';
     text.toUpperCase().split('').forEach(function (c) {
@@ -108,22 +110,24 @@ window.SVGHack = (function () {
     return 'rotate(' + (angle * 180 / Math.PI) + ')';
   }
 
-  // compute the angle in range (-PI <= value < PI)
+  /** compute the angle in range (-PI <= value < PI) */
   function normalizeAngle(angle) {
     while (angle < -Math.PI) angle += 2 * Math.PI;
     while (angle >= Math.PI) angle -= 2 * Math.PI;
     return angle;
   }
 
-  // compute the angle from point a to b (-PI <= value < PI)
-  // where the y-axis points down (SVG)
+  /** Compute the angle from point a to b (-PI <= value < PI)
+   where the y-axis points down (SVG)
+   */
   function computeAngle(a, b) {
     return Math.atan2(b.y - a.y, b.x - a.x);
   }
 
-  // compute the intersection point between
-  // - ray from the center of "from" with angle "angle", and
-  // - the boundary of "from"
+  /** Compute the intersection point between
+   - ray from the center of "from" with angle "angle", and
+   - the boundary of "from"
+   */
   function computeCutPoint(from, angle) {
     if (!from.isRef)
       return {x: from.x, y: from.y};
@@ -166,6 +170,18 @@ window.SVGHack = (function () {
   ////////////////
   // Node
 
+  /** Create a node.
+
+   Tag Arguments:
+   - type: either 'circle', 'square', or 'none'
+   - x, y: absolute location
+   - l: relative location (overrides x and y)
+   - r: radius
+   - w, h: width and height (overrides r)
+   - fill: fill color
+   - name: name for future reference
+   - text: node text
+   */
   function createNode(elt, nodes, type) {
     elt = $(elt);
     var node = {
@@ -177,7 +193,7 @@ window.SVGHack = (function () {
       type: elt.attr('type') || type || 'circle',
       name: elt.attr('name'),
       text: elt.attr('text'),
-      o: S('<g>'),
+      o: S('<g>')
     };
     if (!node.r) {
       if (node.type === 'circle')
@@ -203,7 +219,7 @@ window.SVGHack = (function () {
       node.o.append(S('<circle>', {
         'r': node.r,
         'fill': node.fill,
-        'stroke': node.stroke,
+        'stroke': node.stroke
       }));
     } else if (node.type === 'none') {
       // Do nothing ...
@@ -214,7 +230,7 @@ window.SVGHack = (function () {
         'width': node.w,
         'height': node.h,
         'fill': node.fill,
-        'stroke': node.stroke,
+        'stroke': node.stroke
       }));
     }
     // Label
@@ -223,10 +239,10 @@ window.SVGHack = (function () {
         'x': - node.w / 2,
         'y': - node.h / 2,
         'width': node.w,
-        'height': node.h,
+        'height': node.h
       }).append($('<div>').css({
         'line-height': '' + node.h + 'px',
-        'text-align': 'center',
+        'text-align': 'center'
       }).html(node.text)));
     }
     // Update
@@ -239,6 +255,13 @@ window.SVGHack = (function () {
   ////////////////
   // Edge
 
+  /** Create an edge.
+
+   Tag Arguments:
+   - type: either '--' or '->'
+   - from, to: edge endpoints (either a node name or a relative location)
+   - stroke: edge color
+   */
   function createEdge(elt, nodes, type) {
     elt = $(elt);
     var edge = {
@@ -246,7 +269,7 @@ window.SVGHack = (function () {
       to: parseLocation(elt.attr('to'), elt.parent(), nodes),
       type: elt.attr('type') || type || '--',
       stroke: elt.attr('stroke') || "black",
-      o: S('<g>'),
+      o: S('<g>')
     };
     edge.angle = computeAngle(edge.from, edge.to);
     edge.aFrom = computeCutPoint(edge.from, edge.angle);
@@ -256,7 +279,7 @@ window.SVGHack = (function () {
       y1: edge.aFrom.y,
       x2: edge.aTo.x,
       y2: edge.aTo.y,
-      stroke: edge.stroke,
+      stroke: edge.stroke
     }));
     if (edge.type === '->') {
       // Add the arrowhead
@@ -265,7 +288,7 @@ window.SVGHack = (function () {
         stroke: "none",
         fill: edge.stroke,
         transform: (translateArg(edge.aTo.x, edge.aTo.y)
-                    + ' ' + rotateArg(edge.angle)),
+                    + ' ' + rotateArg(edge.angle))
       }));
     }
     // Update
@@ -275,6 +298,18 @@ window.SVGHack = (function () {
   ////////////////
   // Frame
 
+  /** Create a frame.
+
+   Tag Arguments:
+   - x, y: absolute location of TOP LEFT CORNER
+   - l: relative location of CENTER (overrides x and y)
+   - w, h: width and height
+   - fill: fill color
+   - stroke: stroke color
+   - text: node text
+   - align: text alignment
+   - padding: amount of padding
+   */
   function createFrame(elt, nodes) {
     elt = $(elt);
     var frame = {
@@ -287,7 +322,7 @@ window.SVGHack = (function () {
       align: parseAlign(elt.attr('align') || ""),
       padding: +(elt.attr('padding') || FRAME_PADDING),
       text: elt.attr('text'),
-      o: S('<g>'),
+      o: S('<g>')
     };
     // Location
     if (typeof elt.attr('l') !== 'undefined') {
@@ -305,7 +340,7 @@ window.SVGHack = (function () {
       'width': frame.w,
       'height': frame.h,
       'fill': frame.fill,
-      'stroke': frame.stroke,
+      'stroke': frame.stroke
     }));
     // Label
     if (frame.text) {
@@ -313,14 +348,14 @@ window.SVGHack = (function () {
         'x': 0,
         'y': 0,
         'width': frame.w,
-        'height': frame.h,
+        'height': frame.h
       }).append($('<div>').css({
         'display': 'table-cell',
         'width': frame.w,
         'height': frame.h - 2 * frame.padding,
         'text-align': frame.align.hAlign,
         'vertical-align': frame.align.vAlign,
-        'padding': '' + frame.padding + 'px',
+        'padding': '' + frame.padding + 'px'
       }).html(frame.text)));
     }
     // Update
@@ -328,8 +363,26 @@ window.SVGHack = (function () {
   }
 
   ////////////////
-  // Frame
+  // For Loop
 
+  /** Process a for-loop shorthand tag
+   
+   Template variables can be defined by adding arguments:
+   (1) _KEY="VALUE0|VALUE1|VALUE2"
+       --> KEY[0] = VALUE0, KEY[1] = VALUE1, KEY[2] = VALUE2
+   (2) __KEY="NUMSTEP|STEPSIZE|STARTVALUE"
+       --> KEY[i] = STARTVALUE + (i - 1) * STEPSIZE
+           for i = 0, ..., (NUMSTEP - 1)
+       NUMSTEP is defaulted to 1
+       STEPSIZE is defaulted to 1
+       STARTVALUE is defaulted to 0
+   
+   Any occurrence of "#{KEY}" in a child tag's argument value
+   will be replaced with the KEY[i] in iteration i
+
+   If template variables have unequal number of values,
+   the shorter value lists will be padded with empty strings.
+   */
   function processForLoop(elt) {
     var copies = [],
         attributes = elt[0].attributes,
@@ -387,31 +440,37 @@ window.SVGHack = (function () {
   return {
     process: function (root) {
       root = $(root);
-      // Set defaults
-      root.attr({
-        'stroke': root.attr('stroke') || 'black',
-        'fill': root.attr('fill') || 'white',
-      });
-      // For loop
-      while (root.find('for').length) {
-        processForLoop(root.find('for').first());
-      }
-      // Tweak elements
-      var nodes = {};
-      root.find('*').each(function (i, elt) {
-        var tagName = elt.tagName.toLowerCase();
-        if (tagName === "node") {
-          createNode(elt, nodes);
-        } else if (tagName === "label") {
-          createNode(elt, nodes, "none");
-        } else if (tagName === "frame") {
-          createFrame(elt, nodes);
-        } else if (tagName === "edge") {
-          createEdge(elt, nodes);
-        } else if (tagName === "arrow") {
-          createEdge(elt, nodes, "->");
+      try {
+        // Set defaults
+        root.attr({
+          'stroke': root.attr('stroke') || 'black',
+          'fill': root.attr('fill') || 'white'
+        });
+        // For loop
+        while (root.find('for').length) {
+          processForLoop(root.find('for').first());
         }
-      });
+        // Tweak elements
+        var nodes = {};
+        root.find('*').each(function (i, elt) {
+          var tagName = elt.tagName.toLowerCase();
+          if (tagName === "node") {
+            createNode(elt, nodes);
+          } else if (tagName === "label") {
+            createNode(elt, nodes, "none");
+          } else if (tagName === "frame") {
+            createFrame(elt, nodes);
+          } else if (tagName === "edge") {
+            createEdge(elt, nodes);
+          } else if (tagName === "arrow") {
+            createEdge(elt, nodes, "->");
+          }
+        });
+      } catch (error) {
+        root.replaceWith($('<div class="svg-error">')
+                         .text('SVG Hack Error: ' + error));
+        console.log(error);     // For debugging
+      }
     }
   };
 
