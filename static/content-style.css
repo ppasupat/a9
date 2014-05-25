@@ -187,5 +187,11 @@ svg {
 }
 
 svg:hover {
-  border: 1px solid #EEE;
+  border: 1px solid #DDD;
+}
+
+.svg-error {
+  background-color: #FEE;
+  padding: 1em;
+  font-weight: bold;
 }
