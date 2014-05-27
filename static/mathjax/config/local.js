@@ -71,9 +71,13 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
     TEX.Macro("crow", "\\left\\{ #1 \\right\\}", 1);
     TEX.Macro("nail", "\\left( #1 \\right)", 1);
     TEX.Macro("prob", "P_{#1}\\left( #2 \\right)", 2, "");
+    TEX.Macro("probb", "P_{#1}( #2 )", 2, "");
     TEX.Macro("ex", "\\operatorname{E}_{#1}\\left[ #2 \\right]", 2, "");
+    TEX.Macro("exx", "\\operatorname{E}_{#1}[ #2 ]", 2, "");
     TEX.Macro("var", "\\operatorname{Var}_{#1}\\left[ #2 \\right]", 2, "");
+    TEX.Macro("varr", "\\operatorname{Var}_{#1}[ #2 ]", 2, "");
     TEX.Macro("cov", "\\operatorname{Cov}_{#1}\\left[ #2 \\right]", 2, "");
+    TEX.Macro("covv", "\\operatorname{Cov}_{#1}[ #2 ]", 2, "");
     TEX.Macro("choose", "{\\binom{#1}{#2}}", 2);
     TEX.Macro("matx", "\\crab{\\,\\begin{matrix}#1\\end{matrix}\\,}", 1);
     TEX.Macro("trps", "^\\mathrm{T}");
