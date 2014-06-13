@@ -48,7 +48,7 @@
   font-style: italic;
 }
 
-#content p, #content li {
+#content p, #content li, #content dd {
   line-height: 20px;
 }
 
