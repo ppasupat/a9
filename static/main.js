@@ -487,14 +487,14 @@ $(function() {
           "Ctrl-Q": previewNote,
           "Ctrl-L": linkify,
           "Ctrl-/": superLinkify,
-          "Ctrl-U": repeatCharacters,
           "Shift-Ctrl-B": bulletify,
           "Tab": "indentMore",
           "Shift-Tab": "indentLess",
-          "Ctrl-A": "goLineStart",
-          "Ctrl-E": "goLineEnd",
+          "Home": "goLineLeft",
+          "Ctrl-A": "goLineLeft",
+          "End": "goLineRight",
+          "Ctrl-E": "goLineRight",
           "Ctrl-W": function () {},   // Prevent accidental close
-          "Ctrl-H": addHorizontalLine,
           "Alt-/": autoComplete,
           "Ctrl-Alt-0": addPinyinTone0,
           "Ctrl-Alt-1": addPinyinTone1,
@@ -564,23 +564,6 @@ $(function() {
   var codify = formatFunction("`");
   var linkify = formatFunction("<", ">");
   var superLinkify = formatFunction("[", "]", formatFunction("(", ")"));
-
-  function repeatCharacters() {
-    var pos = myCodeMirror.getCursor();
-    if (pos.line > 0) {
-      var prevLen = myCodeMirror.getLine(pos.line - 1).length;
-      var curLine = myCodeMirror.getLine(pos.line), newCurLine = curLine;
-      if (!curLine) return;
-      while (newCurLine.length < prevLen) newCurLine += curLine;
-      myCodeMirror.setLine(pos.line, newCurLine);
-    }
-  }
-
-  function addHorizontalLine() {
-    myCodeMirror.setLine(myCodeMirror.getCursor().line,
-                         "--------------------------------" + 
-                         "--------------------------------");
-  }
 
   // f(content) -> new content
   function manupulateSelectedLinesFunction(f) {
