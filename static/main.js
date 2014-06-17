@@ -484,6 +484,7 @@ $(function() {
           "Ctrl-S": saveNote,
           "Ctrl-B": bolden,
           "Ctrl-I": italicize,
+          "Ctrl-`": codify,
           "Ctrl-Q": previewNote,
           "Ctrl-L": linkify,
           "Ctrl-/": superLinkify,
