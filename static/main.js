@@ -33,6 +33,16 @@ $(function() {
         })
         .data("info", book).appendTo("#booklist");
     });
+    if (bid == undefined && nid !== undefined) {
+      bookNoteList.books.forEach(function (book) {
+        book.notes.forEach(function (note) {
+          if (note.nid === nid) bid = book.bid;
+        });
+      });
+      if (bid === undefined) {
+        showError('Note #' + nid + ' not found.');
+      }
+    }
     if (bid !== undefined) {
       selectBook(bid, nid);
     } else {
@@ -73,6 +83,7 @@ $(function() {
     $(".note-choice").removeClass("selected");
     nidMap[nid].addClass("selected");
     displayNote();
+    window.location.hash = '#' + nid;
   }
 
   $("#booklist").on("click", ".book-choice", confirmAction(function () {
@@ -82,6 +93,15 @@ $(function() {
   $("#notelist").on("click", ".note-choice", confirmAction(function () {
     selectNote($(this).data("info").nid);
   }));
+
+  $(window).on("hashchange", function (e) {
+    var nid = +window.location.hash.slice(1);
+    if (!nid) {
+      getLists();
+    } else if (nid !== (getCurrentNote() || {}).nid) {
+      getLists(undefined, undefined, nid);
+    }
+  });
 
   //================================================================
   // Dialogs
@@ -492,9 +512,7 @@ $(function() {
           "Tab": "indentMore",
           "Shift-Tab": "indentLess",
           "Home": "goLineLeft",
-          "Ctrl-A": "goLineLeft",
           "End": "goLineRight",
-          "Ctrl-E": "goLineRight",
           "Ctrl-W": function () {},   // Prevent accidental close
           "Alt-/": autoComplete,
           "Ctrl-Alt-0": addPinyinTone0,
@@ -642,6 +660,6 @@ $(function() {
   (function() {
     initializeCodeMirror();
     resize();
-    getLists();
+    $(window).trigger("hashchange");
   })();
 });
