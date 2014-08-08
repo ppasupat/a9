@@ -21,6 +21,11 @@ With r9, you can ...
 The documents are saved locally.
 To sync or back up the documents, use [an existing sync or backup service](http://alternativeto.net/category/backup-and-sync/).
 
+Screenshot
+----------
+
+![r9 screenshot](/../screenshot/static/images/screenshot.png?raw=true "r9 screenshot")
+
 Requirements
 ------------
 
