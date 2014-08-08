@@ -516,6 +516,7 @@ $(function() {
           "End": "goLineRight",
           "Ctrl-W": function () {},   // Prevent accidental close
           "Alt-/": autoComplete,
+          "Ctrl-N": autoComplete,
           "Ctrl-Alt-0": addPinyinTone0,
           "Ctrl-Alt-1": addPinyinTone1,
           "Ctrl-Alt-2": addPinyinTone2,
