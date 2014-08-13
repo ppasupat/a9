@@ -132,15 +132,25 @@ class Model(object):
     def _get_note_path(self, nid):
         return os.path.join(self.datadir, str(nid) + '.md')
 
+    def _get_next_available_nid(self):
+        max_id = 999
+        for x in os.listdir(self.datadir):
+            if x.endswith('.md') and x[:-3].isdigit():
+                max_id = max(int(x[:-3]), max_id)
+        nid = max_id + 1
+        if os.path.exists(self._get_note_path(nid)):
+            raise ForbiddenOperationError("Race condition (?) while adding Note %d" % nid)
+        return nid
+
     def add_empty_note(self, bid, name):
         """Return the (new note nid, (books, notes))"""
         with self.lock:
             books, notes = self._read_names()
             if bid not in books:
                 raise ForbiddenOperationError("Book %d not found" % bid)
-            nid = 1000
-            while nid in notes:
-                nid += 1
+            nid = self._get_next_available_nid()
+            if nid in notes:
+                raise NamesFileError("Note %d found in names but not in directory" % nid)
             notes[nid] = [bid, self.sanitize_name(name)]
             with open(self._get_note_path(nid), 'w', 'utf8') as fout:
                 pass    # Clean the file
