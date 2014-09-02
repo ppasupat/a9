@@ -9,6 +9,7 @@ window.SVGHack = (function () {
   var CIRCLE_NODE_RADIUS = 16;
   var SQUARE_NODE_RADIUS = 14;
   var NONE_NODE_RADIUS = 30;
+  var NONE_NODE_HEIGHT = 30;
   var SPACING = 60;
   var EPSILON = 0.1;
   var FRAME_PADDING = 3;
@@ -204,7 +205,7 @@ window.SVGHack = (function () {
         node.r = NONE_NODE_RADIUS;
     }
     node.w = +elt.attr('w') || node.r * 2;
-    node.h = +elt.attr('h') || node.r * 2;
+    node.h = +elt.attr('h') || (node.type === 'none' ? NONE_NODE_HEIGHT : node.r * 2);
     // Location
     if (typeof elt.attr('l') !== 'undefined') {
       var location = parseLocation(elt.attr('l'), elt.parent(), nodes);

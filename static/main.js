@@ -343,7 +343,7 @@ $(function() {
   // Display and edit note
 
   function displayNote(data, opts) {
-    var defaultOpts = {keepEditor: false, oldScrollTop: 0, markClean: true};
+    var defaultOpts = {keepEditor: false, oldScrollRatio: [0, 1], markClean: true};
     opts = (typeof(opts) === "undefined") ? defaultOpts : $.extend(defaultOpts, opts);
     if (data) {
       if (!(typeof(data.name) === "undefined")) {
@@ -352,10 +352,11 @@ $(function() {
       }
       $("#content").html(data.html);
       $("#content a").attr("target", "_blank");
+      $("#content a[href^='#']").attr("target", null);
       $("#content table").wrap("<div class=table-wrapper></div>");
       MathJax.Hub.Queue([svgHack, "#content"],
                         ["Typeset", MathJax.Hub, "content"],
-                        [scrollDisplay, opts.oldScrollTop]);
+                        [scrollDisplay, opts.oldScrollRatio]);
       if (!opts.keepEditor) {
         myCodeMirror.setValue(data.raw);
         myCodeMirror.clearHistory();
@@ -390,13 +391,12 @@ $(function() {
     var data = {action: 'save', content: myCodeMirror.getValue()};
     $.post('/note/' + note.nid, data, function (data) {
       showMessage("Saved!");
-      var oldScrollTop = $("#content-frame").scrollTop();
       if (typeof callBack === "function") {
         callBack();
       } else {
         displayNote(data, {
           keepEditor: true,
-          oldScrollTop: oldScrollTop
+          oldScrollRatio: getScrollRatio()
         });
       }
     }).fail(showError);
@@ -407,13 +407,12 @@ $(function() {
     var note = getCurrentNote();
     var data = {action: 'preview', content: myCodeMirror.getValue()};
     $.post('/note/' + note.nid, data, function (data) {
-      var oldScrollTop = $("#content-frame").scrollTop();
       if (typeof callBack === "function") {
         callBack();
       } else {
         displayNote(data, {
           keepEditor: true,
-          oldScrollTop: oldScrollTop,
+          oldScrollRatio: getScrollRatio(),
           markClean: false
         });
       }
@@ -428,8 +427,23 @@ $(function() {
     }
   }
 
-  function scrollDisplay(scrollTop) {
-    $("#content-frame").scrollTop(scrollTop);
+  // Scroll Ratio = height over the fold : height under the fold
+  // Return the fraction form to prevent division by 0
+  function getScrollRatio() {
+    var upperScroll = $("#content-frame").scrollTop(),
+        lowerScroll = $("#content").outerHeight() -
+          $("#content-frame").innerHeight() - upperScroll;
+    if (lowerScroll <= 0) {
+      return [1, 0];    // Default: scroll to bottom if possible
+    } else {
+      return [upperScroll, lowerScroll];
+    }
+  }
+
+  function scrollDisplay(scrollRatio) {
+    $("#content-frame").scrollTop(Math.max(0,
+        ($("#content").outerHeight() - $("#content-frame").innerHeight())
+        * scrollRatio[0] * 1. / (scrollRatio[0] + scrollRatio[1])));
   }
 
   $("#editor-save").button().click(saveNote);
@@ -697,6 +711,10 @@ $(function() {
     for (var i = 0; i < GREEK.length; i++) {
       ALCHEMY_KIT['G' + LATIN[i]] = ALCHEMY_KIT['g' + LATIN[i]] = GREEK[i];
     }
+    // Macros
+    _alchemy_fixed([
+      ['al', '$$\\begin{align*}\n\n\\end{align*}$$'],
+      null]);
   })();
 
   function alchemy() {

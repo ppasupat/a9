@@ -4,7 +4,10 @@
 
 #content {
   font-size: 14px;
-  font-family: Arial,​ Liberation Sans,​ DejaVu Sans,​ Sans, sans-serif;
+  font-family: Liberation Sans, Arial, DejaVu Sans, Sans, sans-serif;
+  /* These will make the scrolling correct */
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
 }
 
 #content * {
@@ -92,13 +95,13 @@
 #content code, #content tt, #content pre {
   background-color: #EEE;
   font-size: 100%;
-  font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;
+  font-family: Liberation Mono, Consolas, Menlo, Monaco, Lucida Console, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;
   line-height: 1.4;
 }
 
 #content sub, #content sup {
   font-size: smaller;
-  line-height: normal;
+  line-height: 0;
 }
 
 #content sub {vertical-align: sub;}
