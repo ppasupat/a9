@@ -110,7 +110,7 @@
 /*================================================================
   Lists */
 
-#content ul, #content ol, #content dl {
+#content ul, #content ol {
   margin-left: 40px;
 }
 
@@ -135,7 +135,7 @@
   margin: 0.5em 0;
 }
 
-#content li p {
+#content li p, #content dd p {
   margin: 0.5em 0;
 }
 
