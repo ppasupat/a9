@@ -1,3 +1,7 @@
+body, #cover {
+  background-color: white;
+}
+
 #sidebar-wrapper, #editor-wrapper {
   display: none;
 }

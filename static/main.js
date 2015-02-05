@@ -714,6 +714,8 @@ $(function() {
     // Macros
     _alchemy_fixed([
       ['al', '$$\\begin{align*}\n\n\\end{align*}$$'],
+      ['op', '$$\\begin{align*}\n& \\underset{x}{\\text{minimize}}\n&& f_0(x) \\\\\n' +
+             '& \\text{subject to}\n&& f_i(x) \\leq b_i\n&& (i = 1,\\dots, m)\n\\end{align*}$$'],
       null]);
   })();
 
