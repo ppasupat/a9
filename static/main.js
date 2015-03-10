@@ -348,7 +348,7 @@ $(function() {
     if (data) {
       if (!(typeof(data.name) === "undefined")) {
         $("#content-name").text(data.name).attr("title", data.name);
-        $("title").text(data.name + " - r9");
+        $("title").text(data.name + " - a9");
       }
       $("#content").html(data.html);
       $("#content a").attr("target", "_blank");
@@ -374,7 +374,7 @@ $(function() {
         myCodeMirror.setValue("");
         myCodeMirror.markClean();
         $("#cover").removeClass("hidden");
-        $("title").text("r9");
+        $("title").text("a9");
       } else {
         $("#cover").addClass("loading").removeClass("hidden");
         $.get('/note/' + note.nid, function (data) {
