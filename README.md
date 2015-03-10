@@ -1,9 +1,7 @@
-r9
+a9
 ==
 
-**r9** (*remembered*) is a web-based note-taking application.
-
-It is basically (Evernote basic functionalities) + (LaTeX support) - (upload limit).
+**a9** is an Evernote-style web-based note-taking application with photographic memory.
 
 Features
 --------
