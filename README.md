@@ -6,7 +6,7 @@ a9
 Features
 --------
 
-With r9, you can ...
+With a9, you can ...
 
 * edit and preview a [Markdown](http://daringfireball.net/projects/markdown/) document at the same time
 * save the document in Markdown format, which can be opened directly by other editors
@@ -22,7 +22,7 @@ To sync or back up the documents, use [an existing sync or backup service](http:
 Screenshot
 ----------
 
-![r9 screenshot](/../screenshot/static/images/screenshot.png?raw=true "r9 screenshot")
+![a9 screenshot](/../screenshot/static/images/screenshot.png?raw=true "a9 screenshot")
 
 Requirements
 ------------
