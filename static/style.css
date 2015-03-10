@@ -11,6 +11,10 @@ body, #cover {
   background-color: #E5E5E5;
 }
 
+#cover {
+  opacity: 0.5;
+}
+
 /*================================================================
   Common Formatting */
 

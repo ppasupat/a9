@@ -342,6 +342,8 @@ $(function() {
   //================================================================
   // Display and edit note
 
+  var converter = new Showdown.converter({extensions: ['table']});
+
   function displayNote(data, opts) {
     var defaultOpts = {keepEditor: false, oldScrollRatio: [0, 1], markClean: true};
     opts = (typeof(opts) === "undefined") ? defaultOpts : $.extend(defaultOpts, opts);
@@ -350,7 +352,7 @@ $(function() {
         $("#content-name").text(data.name).attr("title", data.name);
         $("title").text(data.name + " - r9");
       }
-      $("#content").html(data.html);
+      $("#content").html(converter.makeHtml(data.raw));
       $("#content a").attr("target", "_blank");
       $("#content a[href^='#']").attr("target", null);
       $("#content table").wrap("<div class=table-wrapper></div>");
