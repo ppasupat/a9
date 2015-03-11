@@ -342,8 +342,6 @@ $(function() {
   //================================================================
   // Display and edit note
 
-  var converter = new Showdown.converter({extensions: ['table']});
-
   function displayNote(data, opts) {
     var defaultOpts = {keepEditor: false, oldScrollRatio: [0, 1], markClean: true};
     opts = (typeof(opts) === "undefined") ? defaultOpts : $.extend(defaultOpts, opts);
@@ -352,7 +350,7 @@ $(function() {
         $("#content-name").text(data.name).attr("title", data.name);
         $("title").text(data.name + " - a9");
       }
-      $("#content").html(converter.makeHtml(data.raw));
+      $("#content").html(marked(data.raw));
       $("#content a").attr("target", "_blank");
       $("#content a[href^='#']").attr("target", null);
       $("#content table").wrap("<div class=table-wrapper></div>");
@@ -395,30 +393,14 @@ $(function() {
       showMessage("Saved!");
       if (typeof callBack === "function") {
         callBack();
-      } else {
-        displayNote(data, {
-          keepEditor: true,
-          oldScrollRatio: getScrollRatio()
-        });
       }
     }).fail(showError);
-  }
-
-  function previewNote(callBack) {
-    if (!checkChange()) return;
-    var note = getCurrentNote();
-    var data = {action: 'preview', content: myCodeMirror.getValue()};
-    $.post('/note/' + note.nid, data, function (data) {
-      if (typeof callBack === "function") {
-        callBack();
-      } else {
-        displayNote(data, {
-          keepEditor: true,
-          oldScrollRatio: getScrollRatio(),
-          markClean: false
-        });
-      }
-    }).fail(showError);
+    if (typeof callBack !== "function") {
+      displayNote({'raw': data.content}, {
+        keepEditor: true,
+        oldScrollRatio: getScrollRatio()
+      });
+    }
   }
 
   function svgHack(div) {
@@ -521,7 +503,6 @@ $(function() {
           "Ctrl-B": bolden,
           "Ctrl-I": italicize,
           "Ctrl-`": codify,
-          "Ctrl-Q": previewNote,
           "Ctrl-L": linkify,
           "Ctrl-/": superLinkify,
           "Shift-Ctrl-B": bulletify,

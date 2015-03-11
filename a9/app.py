@@ -147,7 +147,7 @@ def get_note(nid):
     note_name = containing_book['notes'][0]['name']
     raw_content = MODEL.get_note_content(nid)
     return yay({"book": {"bid": bid, "name": book_name}, "nid": nid,
-                "name": note_name, "html": raw_content, "raw": raw_content})
+                "name": note_name, "raw": raw_content})
 
 @app.post('/note/<nid:int>')
 def post_note(nid):
@@ -160,10 +160,7 @@ def post_note(nid):
     elif action == 'save':
         content = request.forms.content
         MODEL.save_note_content(nid, content)
-        return yay({"nid": nid, "html": content, "raw": content})
-    elif action == 'preview':
-        content = request.forms.content
-        return yay({"nid": nid, "html": content, "raw": content})
+        return yay({"nid": nid, "raw": content})
     elif action == 'move':
         dest = int(request.forms.dest)
         return yay(get_names(loaded_list=MODEL.move_note(nid, dest)))
