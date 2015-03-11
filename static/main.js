@@ -1,6 +1,6 @@
 $(function() {
   
-  var myCodeMirror, bookNoteList, bidMap, nidMap;
+  var myCodeMirror, changeCountdown, bookNoteList, bidMap, nidMap;
 
   //================================================================
   // Retrieving book and note lists
@@ -383,6 +383,7 @@ $(function() {
         }).fail(showError);
       }
     }
+    changeCountdown = false;
   }
 
   function saveNote(callBack) {
@@ -396,7 +397,7 @@ $(function() {
       }
     }).fail(showError);
     if (typeof callBack !== "function") {
-      displayNote({'raw': data.content}, {
+      displayNote({raw: data.content}, {
         keepEditor: true,
         oldScrollRatio: getScrollRatio()
       });
@@ -522,6 +523,22 @@ $(function() {
           "Ctrl-Alt-5": addPinyinTone5
         }
       });
+    myCodeMirror.on("changes", function (e) {
+      if (!changeCountdown) {
+        setTimeout(function() {
+          if (changeCountdown) {
+            console.log('yay');
+            displayNote({raw: myCodeMirror.getValue()}, {
+              keepEditor: true,
+              oldScrollRatio: getScrollRatio(),
+              markClean: false
+            });
+          }
+        }, 500);
+        changeCountdown = true;
+      }
+    });
+    changeCountdown = false;
   }
 
   function checkChange() {
