@@ -1,6 +1,7 @@
 $(function() {
   
-  var myCodeMirror, changeCountdown, bookNoteList, bidMap, nidMap;
+  var myCodeMirror, changeCountdown = null, bookNoteList, bidMap, nidMap;
+  var AUTO_UPDATE_INTERVAL = 500;
 
   //================================================================
   // Retrieving book and note lists
@@ -84,6 +85,9 @@ $(function() {
     nidMap[nid].addClass("selected");
     displayNote();
     window.location.hash = '#' + nid;
+    // Need to refresh the favicon
+    var href = $('link[rel="shortcut icon"]').remove().attr('href');
+    $('head').append('<link type="image/x-icon" rel="shortcut icon" href="' + href + '">');
   }
 
   $("#booklist").on("click", ".book-choice", confirmAction(function () {
@@ -383,7 +387,25 @@ $(function() {
         }).fail(showError);
       }
     }
-    changeCountdown = false;
+    setCountdown(false);
+  }
+
+  function setCountdown(enable) {
+    if (changeCountdown !== null) {
+      window.clearTimeout(changeCountdown);
+    }
+    if (enable) {
+      var currentId = window.setTimeout(function () {
+        if (changeCountdown === currentId) {
+          displayNote({raw: myCodeMirror.getValue()}, {
+            keepEditor: true,
+            oldScrollRatio: getScrollRatio(),
+            markClean: false
+          });
+        }
+      }, AUTO_UPDATE_INTERVAL);
+      changeCountdown = currentId;
+    }
   }
 
   function saveNote(callBack) {
@@ -523,22 +545,7 @@ $(function() {
           "Ctrl-Alt-5": addPinyinTone5
         }
       });
-    myCodeMirror.on("changes", function (e) {
-      if (!changeCountdown) {
-        setTimeout(function() {
-          if (changeCountdown) {
-            console.log('yay');
-            displayNote({raw: myCodeMirror.getValue()}, {
-              keepEditor: true,
-              oldScrollRatio: getScrollRatio(),
-              markClean: false
-            });
-          }
-        }, 500);
-        changeCountdown = true;
-      }
-    });
-    changeCountdown = false;
+    myCodeMirror.on("changes", setCountdown);
   }
 
   function checkChange() {
