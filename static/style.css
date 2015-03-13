@@ -169,6 +169,11 @@ strong {font-weight: bold;}
   overflow-y: scroll;
 }
 
+.buffer {
+  visibility: hidden;
+  position: absolute;
+}
+
 /*================================================================
   Edit Pane */
 
@@ -218,6 +223,12 @@ strong {font-weight: bold;}
 #cover.loading #nonote {display: none;}
 #cover #loading {display: none;}
 #cover.loading #loading {display: block;}
+.rendering {
+  padding: 2em 0;
+  text-align: center;
+  font-size: 3em;
+  color: #AAA;
+}
 
 #message {
   float: right;

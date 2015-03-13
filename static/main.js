@@ -1,7 +1,7 @@
 $(function() {
   
   var myCodeMirror, changeCountdown = null, bookNoteList, bidMap, nidMap;
-  var AUTO_UPDATE_INTERVAL = 500;
+  var AUTO_UPDATE_INTERVAL = 1500;
 
   //================================================================
   // Retrieving book and note lists
@@ -350,16 +350,19 @@ $(function() {
     var defaultOpts = {keepEditor: false, oldScrollRatio: [0, 1], markClean: true};
     opts = (typeof(opts) === "undefined") ? defaultOpts : $.extend(defaultOpts, opts);
     if (data) {
+      // Has something to display
       if (!(typeof(data.name) === "undefined")) {
         $("#content-name").text(data.name).attr("title", data.name);
         $("title").text(data.name + " - a9");
       }
-      $("#content").html(marked(data.raw));
-      $("#content a").attr("target", "_blank");
-      $("#content a[href^='#']").attr("target", null);
-      $("#content table").wrap("<div class=table-wrapper></div>");
-      MathJax.Hub.Queue([svgHack, "#content"],
-                        ["Typeset", MathJax.Hub, "content"],
+      var buffer = $("<div class=buffer>")
+        .html(marked(data.raw)).appendTo('#content')
+      buffer.find("a").attr("target", "_blank");
+      buffer.find("a[href^='#']").attr("target", null);
+      buffer.find("table").wrap("<div class=table-wrapper></div>");
+      MathJax.Hub.Queue([svgHack, buffer],
+                        ["Typeset", MathJax.Hub, buffer[0]],
+                        [flipBuffer, buffer],
                         [scrollDisplay, opts.oldScrollRatio]);
       if (!opts.keepEditor) {
         myCodeMirror.setValue(data.raw);
@@ -373,6 +376,7 @@ $(function() {
       // Ignore the options
       var note = getCurrentNote();
       if (!note) {
+        // No note selected
         $("#content-name").empty().attr("title", "");
         $("#content").empty();
         myCodeMirror.setValue("");
@@ -380,9 +384,9 @@ $(function() {
         $("#cover").removeClass("hidden");
         $("title").text("a9");
       } else {
-        $("#cover").addClass("loading").removeClass("hidden");
+        // Loading
+        $("#content").empty().append($("<div class=rendering>Loading ...</div>"));
         $.get('/note/' + note.nid, function (data) {
-          $("#cover").removeClass("loading");
           displayNote(data);
         }).fail(showError);
       }
@@ -408,30 +412,17 @@ $(function() {
     }
   }
 
-  function saveNote(callBack) {
-    if (!checkChange()) return;
-    var note = getCurrentNote();
-    var data = {action: 'save', content: myCodeMirror.getValue()};
-    $.post('/note/' + note.nid, data, function (data) {
-      showMessage("Saved!");
-      if (typeof callBack === "function") {
-        callBack();
-      }
-    }).fail(showError);
-    if (typeof callBack !== "function") {
-      displayNote({raw: data.content}, {
-        keepEditor: true,
-        oldScrollRatio: getScrollRatio()
-      });
-    }
-  }
-
   function svgHack(div) {
     if (SVGHack !== undefined) {
       $(div).find('svg').each(function(i, elt) {
         SVGHack.process(elt);
       });
     }
+  }
+
+  function flipBuffer(div) {
+    div.removeClass('buffer');
+    $('#content > div').not(div).remove();
   }
 
   // Scroll Ratio = height over the fold : height under the fold
@@ -451,6 +442,24 @@ $(function() {
     $("#content-frame").scrollTop(Math.max(0,
         ($("#content").outerHeight() - $("#content-frame").innerHeight())
         * scrollRatio[0] * 1. / (scrollRatio[0] + scrollRatio[1])));
+  }
+
+  function saveNote(callBack) {
+    if (!checkChange()) return;
+    var note = getCurrentNote();
+    var data = {action: 'save', content: myCodeMirror.getValue()};
+    $.post('/note/' + note.nid, data, function (data) {
+      showMessage("Saved!");
+      if (typeof callBack === "function") {
+        callBack();
+      }
+    }).fail(showError);
+    if (typeof callBack !== "function") {
+      displayNote({raw: data.content}, {
+        keepEditor: true,
+        oldScrollRatio: getScrollRatio()
+      });
+    }
   }
 
   $("#editor-save").button().click(saveNote);
