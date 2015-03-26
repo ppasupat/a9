@@ -346,6 +346,8 @@ $(function() {
   //================================================================
   // Display and edit note
 
+  var currentBuffer = null;
+
   function displayNote(data, opts) {
     var defaultOpts = {keepEditor: false, oldScrollRatio: [0, 1], markClean: true};
     opts = (typeof(opts) === "undefined") ? defaultOpts : $.extend(defaultOpts, opts);
@@ -356,14 +358,14 @@ $(function() {
         $("title").text(data.name + " - a9");
       }
       var buffer = $("<div class=buffer>")
-        .html(marked(data.raw)).appendTo('#content')
+        .html(marked(data.raw)).appendTo('#content');
+      currentBuffer = buffer;
       buffer.find("a").attr("target", "_blank");
       buffer.find("a[href^='#']").attr("target", null);
       buffer.find("table").wrap("<div class=table-wrapper></div>");
       MathJax.Hub.Queue([svgHack, buffer],
                         ["Typeset", MathJax.Hub, buffer[0]],
-                        [flipBuffer, buffer],
-                        [scrollDisplay, opts.oldScrollRatio]);
+                        [flipBuffer, buffer, opts.oldScrollRatio]);
       if (!opts.keepEditor) {
         myCodeMirror.setValue(data.raw);
         myCodeMirror.clearHistory();
@@ -420,9 +422,11 @@ $(function() {
     }
   }
 
-  function flipBuffer(div) {
+  function flipBuffer(div, oldScrollRatio) {
+    if (div !== currentBuffer) return;
     div.removeClass('buffer');
     $('#content > div').not(div).remove();
+    scrollDisplay(oldScrollRatio);
   }
 
   // Scroll Ratio = height over the fold : height under the fold
