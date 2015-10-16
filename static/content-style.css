@@ -4,10 +4,11 @@
 
 #content {
   font-size: 14px;
-  font-family: Liberation Sans, Arial, DejaVu Sans, Sans, sans-serif;
+  font-family: "Liberation Sans", Arial, sans-serif;
   /* These will make the scrolling correct */
   border-top: 1px solid transparent;
   border-bottom: 1px solid transparent;
+  color: #222;
 }
 
 #content * {
@@ -72,6 +73,13 @@
 
 #content blockquote li blockquote {
   margin-left: 0;
+}
+
+#content hr {
+  margin: 1em 30px;
+  border: 0;
+  background-color: #CCCCCF;
+  height: 1px;
 }
 
 /*================================================================

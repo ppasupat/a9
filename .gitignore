@@ -3,6 +3,7 @@
 *.pyo
 *.bak
 
-data/
-uploads/
-.backup/
+/data/
+/uploads/
+/.backup/
+/lock
