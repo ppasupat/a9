@@ -3,7 +3,7 @@
 
 import sys, os, traceback
 from model import Model, NamesFileError, ForbiddenOperationError
-from bottle import Bottle, static_file, request
+from bottle import Bottle, static_file, request, redirect
 app = Bottle()
 
 def init_directories():
@@ -17,6 +17,10 @@ def init_directories():
 
 ################################
 # Static files
+
+@app.route('/')
+def hello():
+    return redirect("/index.html", code=302)
 
 @app.route('/index.html')
 def server_static():
