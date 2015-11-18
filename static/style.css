@@ -11,10 +11,6 @@ body, #cover {
   background-color: #E5E5E5;
 }
 
-#cover {
-  opacity: 0.5;
-}
-
 /*================================================================
   Common Formatting */
 
@@ -223,11 +219,15 @@ strong {font-weight: bold;}
 #cover.loading #nonote {display: none;}
 #cover #loading {display: none;}
 #cover.loading #loading {display: block;}
-.rendering {
-  padding: 2em 0;
-  text-align: center;
-  font-size: 3em;
-  color: #AAA;
+div.rendering {
+  padding: 0.5em;
+  font-size: 2em;
+  color: #CCCCCF;
+  background-color: #F6F6FA;
+  position: absolute;
+  right: 1em;
+  top: 0.4em;
+  border-radius: 3px;
 }
 
 #message {

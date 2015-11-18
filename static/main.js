@@ -1,7 +1,7 @@
 $(function() {
   
   var myCodeMirror, changeCountdown = null, bookNoteList, bidMap, nidMap;
-  var AUTO_UPDATE_INTERVAL = 1500;
+  var AUTO_UPDATE_INTERVAL = 1000;
 
   //================================================================
   // Retrieving book and note lists
@@ -19,20 +19,20 @@ $(function() {
   }
 
   function populateBookList(bid, nid) {
-    $("#booklist").empty();
+    $('#booklist').empty();
     bidMap = {};
     bookNoteList.books.forEach(function (book) {
-      bidMap[book.bid] = $("<div>").text(book.name).attr("title", book.name)
-        .addClass("book-choice choice cutoff")
+      bidMap[book.bid] = $('<div>').text(book.name).attr('title', book.name)
+        .addClass('book-choice choice cutoff')
         .droppable({
-          accept: ".note-choice",
-          activeClass: "ui-state-default",
-          hoverClass: "ui-state-hover",
+          accept: '.note-choice',
+          activeClass: 'ui-state-default',
+          hoverClass: 'ui-state-hover',
           drop: function(event, ui) {
-            moveNote(ui.draggable.data("info").nid, book.bid);
+            moveNote(ui.draggable.data('info').nid, book.bid);
           }
         })
-        .data("info", book).appendTo("#booklist");
+        .data('info', book).appendTo('#booklist');
     });
     if (bid == undefined && nid !== undefined) {
       bookNoteList.books.forEach(function (book) {
@@ -52,24 +52,24 @@ $(function() {
   }
 
   function selectBook(bid, nid) {
-    $(".book-choice").removeClass("selected");
-    bidMap[bid].addClass("selected");
+    $('.book-choice').removeClass('selected');
+    bidMap[bid].addClass('selected');
     populateNoteList(nid);
   }
 
   function populateNoteList(nid) {
     var book = getCurrentBook();
-    $("#notelist").empty();
+    $('#notelist').empty();
     nidMap = {};
     book.notes.forEach(function (note) {
-      nidMap[note.nid] = $("<div>").text(note.name).attr("title", note.name)
-        .addClass("note-choice choice cutoff")
+      nidMap[note.nid] = $('<div>').text(note.name).attr('title', note.name)
+        .addClass('note-choice choice cutoff')
         .draggable({
-          appendTo: "body",
-          helper: "clone",
+          appendTo: 'body',
+          helper: 'clone',
           delay: 500
         })
-        .data("info", note).appendTo("#notelist");
+        .data('info', note).appendTo('#notelist');
     });
     if (nid !== undefined) {
       selectNote(nid);
@@ -81,8 +81,8 @@ $(function() {
   }
 
   function selectNote(nid) {
-    $(".note-choice").removeClass("selected");
-    nidMap[nid].addClass("selected");
+    $('.note-choice').removeClass('selected');
+    nidMap[nid].addClass('selected');
     displayNote();
     window.location.hash = '#' + nid;
     // Need to refresh the favicon
@@ -90,15 +90,15 @@ $(function() {
     $('head').append('<link type="image/x-icon" rel="shortcut icon" href="' + href + '">');
   }
 
-  $("#booklist").on("click", ".book-choice", confirmAction(function () {
-    selectBook($(this).data("info").bid);
+  $('#booklist').on('click', '.book-choice', confirmAction(function () {
+    selectBook($(this).data('info').bid);
   }));
 
-  $("#notelist").on("click", ".note-choice", confirmAction(function () {
-    selectNote($(this).data("info").nid);
+  $('#notelist').on('click', '.note-choice', confirmAction(function () {
+    selectNote($(this).data('info').nid);
   }));
 
-  $(window).on("hashchange", function (e) {
+  $(window).on('hashchange', function (e) {
     var nid = +window.location.hash.slice(1);
     if (!nid) {
       getLists();
@@ -113,29 +113,29 @@ $(function() {
   var DIALOGS = {};
   
   function buildDialog(title, type, icon, submit, ignore) {
-    var dialog = $("<div>").dialog({
+    var dialog = $('<div>').dialog({
       autoOpen: false,
       modal: true,
       buttons: buttons,
       title: title,
       width: 420,
-    }).append($("<img>").attr("src", "static/icons/" + icon));
+    }).append($('<img>').attr('src', 'static/icons/' + icon));
     var rightPane = $('<div class="right-pane">')
           .append($('<div class="dialog-text">')).appendTo(dialog);
     var input;
-    if (type === "prompt") {
-      dialog.addClass("dialog-prompt");
+    if (type === 'prompt') {
+      dialog.addClass('dialog-prompt');
       input = $('<input type="text" class="dialog-input">')
         .keyup(function (e) {
           if ((e.keyCode || e.which) === 13) {
-            dialog.dialog("close");
-            submit.fn(dialog.data("args"), input.val());
+            dialog.dialog('close');
+            submit.fn(dialog.data('args'), input.val());
           }
         }).appendTo(rightPane);
-    } else if (type === "confirm") {
-      dialog.addClass("dialog-confirm");
-    } else if (type === "alert") {
-      dialog.addClass("dialog-alert");
+    } else if (type === 'confirm') {
+      dialog.addClass('dialog-confirm');
+    } else if (type === 'alert') {
+      dialog.addClass('dialog-alert');
     }
 
     var buttons = [];
@@ -143,8 +143,8 @@ $(function() {
       buttons.push({
         text: submit.name,
         click: function () {
-          dialog.dialog("close");
-          submit.fn(dialog.data("args"), input && input.val());
+          dialog.dialog('close');
+          submit.fn(dialog.data('args'), input && input.val());
         }
       });
     }
@@ -152,42 +152,42 @@ $(function() {
       buttons.push({
         text: ignore.name,
         click: function () {
-          dialog.dialog("close");
-          ignore.fn(dialog.data("args"), input && input.val());
+          dialog.dialog('close');
+          ignore.fn(dialog.data('args'), input && input.val());
         }
       });
     }
     buttons.push({
-      text: "Cancel",
-      click: function() {dialog.dialog("close");}
+      text: 'Cancel',
+      click: function() {dialog.dialog('close');}
     });
-    dialog.dialog("option", "buttons", buttons);
+    dialog.dialog('option', 'buttons', buttons);
 
     DIALOGS[title] = dialog;
   }
 
   function openDialog(title, texts, args, defaultText) {
     var dialog = DIALOGS[title];
-    var dialogText = dialog.find(".dialog-text").empty();
+    var dialogText = dialog.find('.dialog-text').empty();
     texts.forEach(function (item) {
-      dialogText.append($("<p>").text(item));
+      dialogText.append($('<p>').text(item));
     });
-    dialog.find("input").val(defaultText || "");
-    dialog.data("args", args).dialog("open");
+    dialog.find('input').val(defaultText || '');
+    dialog.data('args', args).dialog('open');
   }
   
   //================================================================
   // Add / Rename / Delete books
 
-  var UNTITLED_BOOK = "Untitled Book";
+  var UNTITLED_BOOK = 'Untitled Book';
 
   function getCurrentBook() {
-    return $(".book-choice.selected").data("info");
+    return $('.book-choice.selected').data('info');
   }
 
-  // Add a book named "Untitled Book"
-  buildDialog("Add Book", "prompt", "add.png", {
-    name: "Add",
+  // Add a book named 'Untitled Book'
+  buildDialog('Add Book', 'prompt', 'add.png', {
+    name: 'Add',
     fn: function (args, name) {
       name = name || UNTITLED_BOOK;
       var data = {name: name};
@@ -198,12 +198,12 @@ $(function() {
   });
 
   function addBook() {
-    openDialog("Add Book", ["Enter the book's name:"]);
+    openDialog('Add Book', ['Enter the book\'s name:']);
   }
 
   // Rename a book
-  buildDialog("Rename Book", "prompt", "rename.png", {
-    name: "Rename",
+  buildDialog('Rename Book', 'prompt', 'rename.png', {
+    name: 'Rename',
     fn: function (args, name) {
       var book = args.book, note = args.note;
       if (!name) return;
@@ -217,17 +217,17 @@ $(function() {
   function renameBook() {
     var book = getCurrentBook(), note = getCurrentNote();
     if (book.bid === 0) {
-      showError("Cannot rename " + book.name + "!");
+      showError('Cannot rename ' + book.name + '!');
       return;
     }
-    openDialog("Rename Book",
-               ["Current name: " + book.name, "Enter the new name:"],
+    openDialog('Rename Book',
+               ['Current name: ' + book.name, 'Enter the new name:'],
                {book: book, note: note}, book.name);
   }
 
   // Delete a book
-  buildDialog("Delete Book", "confirm", "delete.png", {
-    name: "Delete",
+  buildDialog('Delete Book', 'confirm', 'delete.png', {
+    name: 'Delete',
     fn: function (args) {
       var book = args.book;
       var data = {action: 'delete'};
@@ -240,36 +240,36 @@ $(function() {
   function deleteBook() {
     var book = getCurrentBook();
     if (book.bid === 0) {
-      showError("Cannot delete " + book.name + "!");
+      showError('Cannot delete ' + book.name + '!');
       return;
     }
-    openDialog("Delete Book", ["Delete book: " + book.name + "?"],
+    openDialog('Delete Book', ['Delete book: ' + book.name + '?'],
                {book: book});
   }
 
-  $("#book-add").button({icons: {primary: "ui-icon-plusthick"}, text: false})
+  $('#book-add').button({icons: {primary: 'ui-icon-plusthick'}, text: false})
     .click(confirmAction(addBook));
-  $("#book-rename").button({icons: {primary: "ui-icon-pencil"}, text: false})
+  $('#book-rename').button({icons: {primary: 'ui-icon-pencil'}, text: false})
     .click(confirmAction(renameBook));
-  $("#book-delete").button({icons: {primary: "ui-icon-trash"}, text: false})
+  $('#book-delete').button({icons: {primary: 'ui-icon-trash'}, text: false})
     .click(confirmAction(deleteBook));
 
   //================================================================
   // Add / Rename / Move / Delete notes
 
-  var UNTITLED_NOTE = "Untitled Note";
+  var UNTITLED_NOTE = 'Untitled Note';
 
   function getCurrentNote() {
-    var note = $(".note-choice.selected");
+    var note = $('.note-choice.selected');
     if (note.length) {
-      return note.data("info");
+      return note.data('info');
     }
     return null;
   }
 
-  // Add a note named "Untitled Note"
-  buildDialog("Add Note", "prompt", "add.png", {
-    name: "Add",
+  // Add a note named 'Untitled Note'
+  buildDialog('Add Note', 'prompt', 'add.png', {
+    name: 'Add',
     fn: function (args, name) {
       var book = args.book;
       name = name || UNTITLED_NOTE;
@@ -282,12 +282,12 @@ $(function() {
 
   function addNote() {
     var book = getCurrentBook();
-    openDialog("Add Note", ["Enter the note's name:"], {book: book});
+    openDialog('Add Note', ['Enter the note\'s name:'], {book: book});
   }
 
   // Rename a note
-  buildDialog("Rename Note", "prompt", "rename.png", {
-    name: "Rename",
+  buildDialog('Rename Note', 'prompt', 'rename.png', {
+    name: 'Rename',
     fn: function (args, name) {
       var note = args.note;
       if (!name) return;
@@ -300,8 +300,8 @@ $(function() {
 
   function renameNote() {
     var note = getCurrentNote();
-    openDialog("Rename Note",
-               ["Current name: " + note.name, "Enter the new name:"],
+    openDialog('Rename Note',
+               ['Current name: ' + note.name, 'Enter the new name:'],
                {note: note}, note.name);
   }
 
@@ -319,8 +319,8 @@ $(function() {
   }
 
   // Delete a note
-  buildDialog("Delete Note", "confirm", "delete.png", {
-    name: "Delete",
+  buildDialog('Delete Note', 'confirm', 'delete.png', {
+    name: 'Delete',
     fn: function (args) {
       var note = args.note;
       var data = {action: 'delete'};
@@ -332,15 +332,15 @@ $(function() {
 
   function deleteNote() {
     var note = getCurrentNote();
-    openDialog("Delete Note", ["Delete note: " + note.name + "?"],
+    openDialog('Delete Note', ['Delete note: ' + note.name + '?'],
                {note: note});
   }
 
-  $("#note-add").button({icons: {primary: "ui-icon-plusthick"}, text: false})
+  $('#note-add').button({icons: {primary: 'ui-icon-plusthick'}, text: false})
     .click(confirmAction(addNote));
-  $("#note-rename").button({icons: {primary: "ui-icon-pencil"}, text: false})
+  $('#note-rename').button({icons: {primary: 'ui-icon-pencil'}, text: false})
     .click(confirmAction(renameNote));
-  $("#note-delete").button({icons: {primary: "ui-icon-trash"}, text: false})
+  $('#note-delete').button({icons: {primary: 'ui-icon-trash'}, text: false})
     .click(confirmAction(deleteNote));
 
   //================================================================
@@ -350,22 +350,29 @@ $(function() {
 
   function displayNote(data, opts) {
     var defaultOpts = {keepEditor: false, oldScrollRatio: [0, 1], markClean: true};
-    opts = (typeof(opts) === "undefined") ? defaultOpts : $.extend(defaultOpts, opts);
+    opts = (typeof(opts) === 'undefined') ? defaultOpts : $.extend(defaultOpts, opts);
     if (data) {
       // Has something to display
-      if (!(typeof(data.name) === "undefined")) {
-        $("#content-name").text(data.name).attr("title", data.name);
-        $("title").text(data.name + " - a9");
+      if (typeof(data.name) !== 'undefined') {
+        $('#content-name').text(data.name).attr('title', data.name);
+        $('title').text(data.name + ' - a9');
       }
-      var buffer = $("<div class=buffer>")
+      var buffer = $('<div class=buffer>')
         .html(marked(data.raw)).appendTo('#content');
       currentBuffer = buffer;
-      buffer.find("a").attr("target", "_blank");
-      buffer.find("a[href^='#']").attr("target", null);
-      buffer.find("table").wrap("<div class=table-wrapper></div>");
-      MathJax.Hub.Queue([svgHack, buffer],
-                        ["Typeset", MathJax.Hub, buffer[0]],
-                        [flipBuffer, buffer, opts.oldScrollRatio]);
+      buffer.find('a').attr('target', '_blank');
+      buffer.find('a[href^="#"]').attr('target', null);
+      buffer.find('table').wrap('<div class=table-wrapper></div>');
+      if (opts.quick) {
+        MathJax.Hub.Queue([flipBuffer, buffer, opts.oldScrollRatio],
+                          [svgHack, buffer],
+                          ['Typeset', MathJax.Hub, buffer[0]]);
+      } else {
+        MathJax.Hub.Queue([svgHack, buffer],
+                          ['Typeset', MathJax.Hub, buffer[0]],
+                          [flipBuffer, buffer, opts.oldScrollRatio]);
+
+      }
       if (!opts.keepEditor) {
         myCodeMirror.setValue(data.raw);
         myCodeMirror.clearHistory();
@@ -373,23 +380,23 @@ $(function() {
       if (opts.markClean) {
         myCodeMirror.markClean();
       }
-      $("#cover").addClass("hidden");
+      $('#cover').addClass('hidden');
     } else {
       // Ignore the options
       var note = getCurrentNote();
       if (!note) {
         // No note selected
-        $("#content-name").empty().attr("title", "");
-        $("#content").empty();
-        myCodeMirror.setValue("");
+        $('#content-name').empty().attr('title', '');
+        $('#content').empty();
+        myCodeMirror.setValue('');
         myCodeMirror.markClean();
-        $("#cover").removeClass("hidden");
-        $("title").text("a9");
+        $('#cover').removeClass('hidden');
+        $('title').text('a9');
       } else {
         // Loading
-        $("#content").empty().append($("<div class=rendering>Loading ...</div>"));
+        $('#content-frame').prepend($('<div class=rendering>Loading ...</div>'));
         $.get('/note/' + note.nid, function (data) {
-          displayNote(data);
+          displayNote(data, {quick: true});
         }).fail(showError);
       }
     }
@@ -427,14 +434,15 @@ $(function() {
     div.removeClass('buffer');
     $('#content > div').not(div).remove();
     scrollDisplay(oldScrollRatio);
+    $('#content-frame > .rendering').fadeOut('fast');
   }
 
   // Scroll Ratio = height over the fold : height under the fold
   // Return the fraction form to prevent division by 0
   function getScrollRatio() {
-    var upperScroll = $("#content-frame").scrollTop(),
-        lowerScroll = $("#content").outerHeight() -
-          $("#content-frame").innerHeight() - upperScroll;
+    var upperScroll = $('#content-frame').scrollTop(),
+        lowerScroll = $('#content').outerHeight() -
+          $('#content-frame').innerHeight() - upperScroll;
     if (lowerScroll <= 0) {
       return [1, 0];    // Default: scroll to bottom if possible
     } else {
@@ -443,8 +451,8 @@ $(function() {
   }
 
   function scrollDisplay(scrollRatio) {
-    $("#content-frame").scrollTop(Math.max(0,
-        ($("#content").outerHeight() - $("#content-frame").innerHeight())
+    $('#content-frame').scrollTop(Math.max(0,
+        ($('#content').outerHeight() - $('#content-frame').innerHeight())
         * scrollRatio[0] * 1. / (scrollRatio[0] + scrollRatio[1])));
   }
 
@@ -453,12 +461,12 @@ $(function() {
     var note = getCurrentNote();
     var data = {action: 'save', content: myCodeMirror.getValue()};
     $.post('/note/' + note.nid, data, function (data) {
-      showMessage("Saved!");
-      if (typeof callBack === "function") {
+      showMessage('Saved!');
+      if (typeof callBack === 'function') {
         callBack();
       }
     }).fail(showError);
-    if (typeof callBack !== "function") {
+    if (typeof callBack !== 'function') {
       displayNote({raw: data.content}, {
         keepEditor: true,
         oldScrollRatio: getScrollRatio()
@@ -466,7 +474,7 @@ $(function() {
     }
   }
 
-  $("#editor-save").button().click(saveNote);
+  $('#editor-save').button().click(saveNote);
 
   //================================================================
   // Layout / Resize
@@ -476,14 +484,14 @@ $(function() {
 
   function resize() {
     var wh = $(window).height();
-    $("#lists-wrapper").height(wh);
-    $(".lower-wrapper").height(function () {
+    $('#lists-wrapper').height(wh);
+    $('.lower-wrapper').height(function () {
       return wh - $(this).prev().height() - MARGIN_OFFSET;
     });
-    $(".lower-wrapper > *").height(function () {
+    $('.lower-wrapper > *').height(function () {
       return $(this).parent().height() - MARGIN_OFFSET;
     });
-    $(".list").height(function () {
+    $('.list').height(function () {
       return ($(this).parent().parent().height()
               - $(this).prev().height() - BIG_MARGIN_OFFSET);
     });
@@ -498,7 +506,7 @@ $(function() {
   };
 
   function showMessage(message) {
-    $("#message").finish().text(message).show().delay(3000).fadeOut("slow");
+    $('#message').finish().text(message).show().delay(3000).fadeOut('slow');
   }
 
   function showError(message) {
@@ -506,28 +514,28 @@ $(function() {
     if (message.responseJSON) {
       message = message.responseJSON.error;
     } else if (message.status === 0) {
-      message = "Cannot connect to the server.";
-      $("#cover").removeClass("hidden");
+      message = 'Cannot connect to the server.';
+      $('#cover').removeClass('hidden');
     }
-    $("#error-message").text(message);
-    $("#error").finish().show().delay(3000).fadeOut("slow");
+    $('#error-message').text(message);
+    $('#error').finish().show().delay(3000).fadeOut('slow');
   }
   
   
   function toggleSidebar() {
-    $("body").toggleClass("hide-sidebar");
+    $('body').toggleClass('hide-sidebar');
     resize();
   }
-  $("#sidebar-toggler").click(toggleSidebar);
+  $('#sidebar-toggler').click(toggleSidebar);
 
   //================================================================
   // Editor
 
   function initializeCodeMirror() {
     myCodeMirror = CodeMirror(
-      document.getElementById("editor-lower-wrapper"), {
+      document.getElementById('editor-lower-wrapper'), {
         mode: {
-          name: "markdown",
+          name: 'markdown',
           underscoresBreakWords: false,
           fencedCodeBlocks: true,
         },
@@ -535,43 +543,43 @@ $(function() {
         lineWrapping: true,
         matchBrackets: true,
         extraKeys: {
-          "Ctrl-S": saveNote,
-          "Ctrl-B": bolden,
-          "Ctrl-I": italicize,
-          "Ctrl-`": codify,
-          "Ctrl-L": linkify,
-          "Ctrl-/": superLinkify,
-          "Shift-Ctrl-B": bulletify,
-          "Ctrl-A": alchemy,
-          "Tab": "indentMore",
-          "Shift-Tab": "indentLess",
-          "Home": "goLineLeft",
-          "End": "goLineRight",
-          "Ctrl-W": function () {},   // Prevent accidental close
-          "Alt-/": autoComplete,
-          "Ctrl-N": autoComplete,
-          "Ctrl-Alt-0": addPinyinTone0,
-          "Ctrl-Alt-1": addPinyinTone1,
-          "Ctrl-Alt-2": addPinyinTone2,
-          "Ctrl-Alt-3": addPinyinTone3,
-          "Ctrl-Alt-4": addPinyinTone4,
-          "Ctrl-Alt-5": addPinyinTone5
+          'Ctrl-S': saveNote,
+          'Ctrl-B': bolden,
+          'Ctrl-I': italicize,
+          'Ctrl-`': codify,
+          'Ctrl-L': linkify,
+          'Ctrl-/': superLinkify,
+          'Shift-Ctrl-B': bulletify,
+          'Ctrl-A': alchemy,
+          'Tab': 'indentMore',
+          'Shift-Tab': 'indentLess',
+          'Home': 'goLineLeft',
+          'End': 'goLineRight',
+          'Ctrl-W': function () {},   // Prevent accidental close
+          'Alt-/': autoComplete,
+          'Ctrl-N': autoComplete,
+          'Ctrl-Alt-0': addPinyinTone0,
+          'Ctrl-Alt-1': addPinyinTone1,
+          'Ctrl-Alt-2': addPinyinTone2,
+          'Ctrl-Alt-3': addPinyinTone3,
+          'Ctrl-Alt-4': addPinyinTone4,
+          'Ctrl-Alt-5': addPinyinTone5
         }
       });
-    myCodeMirror.on("changes", setCountdown);
+    myCodeMirror.on('changes', setCountdown);
   }
 
   function checkChange() {
     return !myCodeMirror.isClean();
   }
 
-  buildDialog("Note Modified", "confirm", "question.png", {
-    name: "Save",
+  buildDialog('Note Modified', 'confirm', 'question.png', {
+    name: 'Save',
     fn: function (args) {
       saveNote(function () {args.f.call(args.that);});
     }
   }, {
-    name: "Ignore",
+    name: 'Ignore',
     fn: function (args) {
       args.f.call(args.that);
     }
@@ -583,7 +591,7 @@ $(function() {
       if (!checkChange()) {
         f.call(that);
       } else {
-        openDialog("Note Modified", ["Note modified. Save or ignore?"],
+        openDialog('Note Modified', ['Note modified. Save or ignore?'],
                    {f: f, that: that});
       }
     };
@@ -614,17 +622,17 @@ $(function() {
       }
     };
   }
-  var bolden = formatFunction("**");
-  var italicize = formatFunction("_");
-  var codify = formatFunction("`");
-  var linkify = formatFunction("<", ">");
-  var superLinkify = formatFunction("[", "]", formatFunction("(", ")"));
+  var bolden = formatFunction('**');
+  var italicize = formatFunction('_');
+  var codify = formatFunction('`');
+  var linkify = formatFunction('<', '>');
+  var superLinkify = formatFunction('[', ']', formatFunction('(', ')'));
 
   // f(content) -> new content
   function manupulateSelectedLinesFunction(f) {
     return function () {
-      var start = myCodeMirror.getCursor("start");
-      var end = myCodeMirror.getCursor("end");
+      var start = myCodeMirror.getCursor('start');
+      var end = myCodeMirror.getCursor('end');
       var endLength = myCodeMirror.getLine(end.line).length;
       myCodeMirror.extendSelection({line: start.line, ch: 0},
                                    {line: end.line, ch: endLength});
@@ -753,6 +761,6 @@ $(function() {
   (function() {
     initializeCodeMirror();
     resize();
-    $(window).trigger("hashchange");
+    $(window).trigger('hashchange');
   })();
 });
