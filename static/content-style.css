@@ -38,6 +38,7 @@
   border: 1px solid #7BB;
   padding: 5px;
   margin: 0.8em 15px;
+  border-radius: 3px;
 }
 
 #content h2 {
@@ -53,7 +54,7 @@
 }
 
 #content p, #content li, #content dd {
-  line-height: 20px;
+  line-height: 22px;
 }
 
 #content blockquote {
@@ -98,17 +99,22 @@
   border: 1px solid #ADD;
   font-style: normal;
   padding: 1px 3px;
+  border-radius: 2px;
+  margin: 0 2px;
 }
 
 #content a {
-  color: #00C;
+  color: #22C;
+  text-decoration: none;
+}
+#content a:hover {
+  text-decoration: underline;
 }
 
 #content code, #content tt, #content pre {
   background-color: #EEE;
   font-size: 100%;
   font-family: Liberation Mono, Consolas, Menlo, Monaco, Lucida Console, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;
-  line-height: 1.4;
 }
 
 #content sub, #content sup {
@@ -175,7 +181,7 @@
 
 #content td, #content th { 
   display: table-cell;
-  padding: 3px;
+  padding: 5px 8px;
   border: 1px solid #BBA;
 }
 
