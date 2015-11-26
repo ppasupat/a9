@@ -357,21 +357,23 @@ $(function() {
         $('#content-name').text(data.name).attr('title', data.name);
         $('title').text(data.name + ' - a9');
       }
-      var buffer = $('<div class=buffer>')
-        .html(marked(data.raw)).appendTo('#content');
+      var buffer = $('<div class=buffer>').appendTo('#content');
       currentBuffer = buffer;
-      buffer.find('a').attr('target', '_blank');
-      buffer.find('a[href^="#"]').attr('target', null);
-      buffer.find('table').wrap('<div class=table-wrapper></div>');
       if (opts.quick) {
-        MathJax.Hub.Queue([flipBuffer, buffer, opts.oldScrollRatio],
-                          [svgHack, buffer],
-                          ['Typeset', MathJax.Hub, buffer[0]]);
+        MathJax.Hub.Queue(
+            [renderMarkdown, buffer, data.raw],
+            [flipBuffer, buffer],
+            [scrollDisplay, opts.oldScrollRatio],
+            [svgHack, buffer],
+            ['Typeset', MathJax.Hub, buffer[0]],
+            [scrollDisplay, opts.oldScrollRatio]);
       } else {
-        MathJax.Hub.Queue([svgHack, buffer],
-                          ['Typeset', MathJax.Hub, buffer[0]],
-                          [flipBuffer, buffer, opts.oldScrollRatio]);
-
+        MathJax.Hub.Queue(
+            [renderMarkdown, buffer, data.raw],
+            [svgHack, buffer],
+            ['Typeset', MathJax.Hub, buffer[0]],
+            [flipBuffer, buffer],
+            [scrollDisplay, opts.oldScrollRatio]);
       }
       if (!opts.keepEditor) {
         myCodeMirror.setValue(data.raw);
@@ -421,6 +423,13 @@ $(function() {
     }
   }
 
+  function renderMarkdown(div, rawMarkdown) {
+    div.html(marked(rawMarkdown));
+    div.find('a').attr('target', '_blank');
+    div.find('a[href^="#"]').attr('target', null);
+    div.find('table').wrap('<div class=table-wrapper></div>');
+  }
+
   function svgHack(div) {
     if (SVGHack !== undefined) {
       $(div).find('svg').each(function(i, elt) {
@@ -429,11 +438,10 @@ $(function() {
     }
   }
 
-  function flipBuffer(div, oldScrollRatio) {
+  function flipBuffer(div) {
     if (div !== currentBuffer) return;
     div.removeClass('buffer');
     $('#content > div').not(div).remove();
-    scrollDisplay(oldScrollRatio);
     $('#content-frame > .rendering').fadeOut('fast');
   }
 

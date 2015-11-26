@@ -1,4 +1,4 @@
 #!/bin/bash
 mkdir -p .backup
 filename="backup-$(date -u +%Y-%m-%d-%H-%M-%S).tar.gz"
-tar -czf ".backup/$filename" data/*
+tar -czvf ".backup/$filename" data/*
