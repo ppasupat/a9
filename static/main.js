@@ -484,7 +484,6 @@ $(function() {
 
   function resize() {
     var wh = $(window).height();
-    $('#lists-wrapper').height(wh);
     $('.lower-wrapper').height(function () {
       return wh - $(this).prev().height() - MARGIN_OFFSET;
     });

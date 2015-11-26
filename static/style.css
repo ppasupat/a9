@@ -174,11 +174,11 @@ strong {font-weight: bold;}
   Edit Pane */
 
 #editor-toolbar-wrapper {
-  height: 30px;
+  height: 40px;
 }
 
 #editor-toolbar{
-  padding: 5px;
+  padding: 10px;
 }
 
 #editor-toolbar .ui-button {
@@ -191,12 +191,12 @@ strong {font-weight: bold;}
 
 #editor-lower-wrapper {
   margin-right: 5px;
-  margin-top: 5px;
 }
 
 .CodeMirror {
   font-family: monospace;
   background-color: #FCFEFF;
+  border: 1px solid #DDD;
 }
 
 /*================================================================

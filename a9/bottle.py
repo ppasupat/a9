@@ -16,7 +16,7 @@ License: MIT (see LICENSE for details)
 from __future__ import with_statement
 
 __author__ = 'Marcel Hellkamp'
-__version__ = '0.12.8'
+__version__ = '0.12.9'
 __license__ = 'MIT'
 
 # The gevent server adapter needs to patch some modules before they are imported
@@ -2107,7 +2107,7 @@ class ConfigDict(dict):
             if not isinstance(source, dict):
                 raise TypeError('Source is not a dict (r)' % type(key))
             for key, value in source.items():
-                if not isinstance(key, str):
+                if not isinstance(key, basestring):
                     raise TypeError('Key is not a string (%r)' % type(key))
                 full_key = prefix + '.' + key if prefix else key
                 if isinstance(value, dict):
@@ -2123,7 +2123,7 @@ class ConfigDict(dict):
             namespace. Apart from that it works just as the usual dict.update().
             Example: ``update('some.namespace', key='value')`` '''
         prefix = ''
-        if a and isinstance(a[0], str):
+        if a and isinstance(a[0], basestring):
             prefix = a[0].strip('.') + '.'
             a = a[1:]
         for key, value in dict(*a, **ka).items():
@@ -2135,7 +2135,7 @@ class ConfigDict(dict):
         return self[key]
 
     def __setitem__(self, key, value):
-        if not isinstance(key, str):
+        if not isinstance(key, basestring):
             raise TypeError('Key has type %r (not a string)' % type(key))
 
         value = self.meta_get(key, 'filter', lambda x: x)(value)
@@ -3415,15 +3415,19 @@ class StplParser(object):
     _re_inl = _re_tok.replace('|\\n','') # We re-use this string pattern later
     # 2: Comments (until end of line, but not the newline itself)
     _re_tok += '|(#.*)'
-    # 3,4: Keywords that start or continue a python block (only start of line)
+    # 3,4: Open and close grouping tokens
+    _re_tok += '|([\[\{\(])'
+    _re_tok += '|([\]\}\)])'
+    # 5,6: Keywords that start or continue a python block (only start of line)
     _re_tok += '|^([ \\t]*(?:if|for|while|with|try|def|class)\\b)' \
                '|^([ \\t]*(?:elif|else|except|finally)\\b)'
-    # 5: Our special 'end' keyword (but only if it stands alone)
+    # 7: Our special 'end' keyword (but only if it stands alone)
     _re_tok += '|((?:^|;)[ \\t]*end[ \\t]*(?=(?:%(block_close)s[ \\t]*)?\\r?$|;|#))'
-    # 6: A customizable end-of-code-block template token (only end of line)
+    # 8: A customizable end-of-code-block template token (only end of line)
     _re_tok += '|(%(block_close)s[ \\t]*(?=$))'
-    # 7: And finally, a single newline. The 8th token is 'everything else'
+    # 9: And finally, a single newline. The 10th token is 'everything else'
     _re_tok += '|(\\r?\\n)'
+
     # Match the start tokens of code areas in a template
     _re_split = '(?m)^[ \t]*(\\\\?)((%(line_start)s)|(%(block_start)s))(%%?)'
     # Match inline statements (may contain python strings)
@@ -3437,6 +3441,7 @@ class StplParser(object):
         self.code_buffer, self.text_buffer = [], []
         self.lineno, self.offset = 1, 0
         self.indent, self.indent_mod = 0, 0
+        self.paren_depth = 0
 
     def get_syntax(self):
         ''' Tokens as a space separated string (default: <% %> % {{ }}) '''
@@ -3493,8 +3498,8 @@ class StplParser(object):
                 return
             code_line += self.source[self.offset:self.offset+m.start()]
             self.offset += m.end()
-            _str, _com, _blk1, _blk2, _end, _cend, _nl = m.groups()
-            if code_line and (_blk1 or _blk2): # a if b else c
+            _str, _com, _po, _pc, _blk1, _blk2, _end, _cend, _nl = m.groups()
+            if (code_line or self.paren_depth > 0) and (_blk1 or _blk2): # a if b else c
                 code_line += _blk1 or _blk2
                 continue
             if _str:    # Python string
@@ -3503,6 +3508,15 @@ class StplParser(object):
                 comment = _com
                 if multiline and _com.strip().endswith(self._tokens[1]):
                     multiline = False # Allow end-of-block in comments
+            elif _po:  # open parenthesis
+                self.paren_depth += 1
+                code_line += _po
+            elif _pc:  # close parenthesis
+                if self.paren_depth > 0:
+                    # we could check for matching parentheses here, but it's
+                    # easier to leave that to python - just check counts
+                    self.paren_depth -= 1
+                code_line += _pc
             elif _blk1: # Start-block keyword (if/for/while/def/try/...)
                 code_line, self.indent_mod = _blk1, -1
                 self.indent += 1
