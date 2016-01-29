@@ -1,7 +1,7 @@
 a9
 ==
 
-**a9** is an Evernote-style web-based note-taking application with photographic memory.
+**a9** is an Evernote-style note-taking application.
 
 Features
 --------
@@ -10,6 +10,7 @@ With a9, you can ...
 
 * edit and preview a [Markdown](http://daringfireball.net/projects/markdown/) document at the same time
 * save the document in Markdown format, which can be opened directly by other editors
+* export the document and view it in the viewer
 * organize documents into "books" like in [Evernote](https://evernote.com/)
 * print documents in full-page format
 * customize styling by editing the CSS files
@@ -18,6 +19,7 @@ With a9, you can ...
 
 The documents are saved locally.
 To sync or back up the documents, use [an existing sync or backup service](http://alternativeto.net/category/backup-and-sync/).
+I put it in my [Dropbox](https://www.dropbox.com/).
 
 Screenshot
 ----------
