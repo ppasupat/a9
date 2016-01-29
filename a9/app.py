@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import sys, os, traceback
+import sys, os, traceback, datetime
 from model import Model, NamesFileError, ForbiddenOperationError
 from bottle import Bottle, static_file, request, redirect
 app = Bottle()
@@ -151,6 +151,7 @@ def get_note(nid):
     note_name = containing_book['notes'][0]['name']
     raw_content = MODEL.get_note_content(nid)
     return yay({"book": {"bid": bid, "name": book_name}, "nid": nid,
+                "time": datetime.datetime.now().isoformat(),
                 "name": note_name, "raw": raw_content})
 
 @app.post('/note/<nid:int>')

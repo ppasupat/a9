@@ -484,6 +484,11 @@ $(function() {
 
   $('#editor-save').button().click(saveNote);
 
+  $('#editor-export').button().click(function () {
+    saveNote();
+    window.open('/note/' + getCurrentNote().nid, '_blank');
+  });
+
   //================================================================
   // Layout / Resize
 
