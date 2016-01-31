@@ -73,9 +73,6 @@ def main():
     shutil.copytree(J(srcdir, 'static', 'mathjax'), dstmathjax)
     print 'DONE!'
 
-    from a9 import app
-    print app.get_note(1000)
-
 if __name__ == '__main__':
     main()
 
