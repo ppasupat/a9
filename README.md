@@ -10,7 +10,7 @@ With a9, you can ...
 
 * edit and preview a [Markdown](http://daringfireball.net/projects/markdown/) document at the same time
 * save the document in Markdown format, which can be opened directly by other editors
-* export the document and view it in the viewer (to be implemented)
+* export the document and view it in the viewer
 * organize documents into "books" like in [Evernote](https://evernote.com/)
 * print documents in full-page format
 * customize styling by editing the CSS files
