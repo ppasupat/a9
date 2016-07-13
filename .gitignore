@@ -8,3 +8,6 @@
 /uploads/
 /.backup/
 /lock
+/viewer/*.html
+/viewer/uploads/
+/sync-viewer

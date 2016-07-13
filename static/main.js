@@ -343,6 +343,38 @@ $(function() {
   $('#note-delete').button({icons: {primary: 'ui-icon-trash'}, text: false})
     .click(confirmAction(deleteNote));
 
+  // Export a note
+  buildDialog('Export Note', 'prompt', 'rename.png', {
+    name: 'Export',
+    fn: function (args, name) {
+      if (!name) return;
+      saveNote(function (data) {
+        // Render Markdown + svgHack
+        var div = $('<div>').appendTo('body')
+          .css({'position': 'fixed', 'visibility': 'hidden'});
+        renderMarkdown(div, data.raw, true);
+        svgHack(div);
+        // Submit to the server
+        var submit_data = {action: 'export', content: div.html(), name: name};
+        div.remove();
+        $.post('/note/' + data.nid, submit_data, function () {
+          showMessage('Exported!');
+          window.open('/viewer/' + data.nid + '.html', '_blank');
+        });
+
+      });
+    }
+  });
+
+  function exportNote() {
+    var note = getCurrentNote();
+    openDialog('Export Note',
+               ['Enter a name for the exported note:'],
+               {}, note.name);
+  }
+    
+  $('#editor-export').button().click(exportNote);
+
   //================================================================
   // Display and edit note
 
@@ -423,10 +455,15 @@ $(function() {
     }
   }
 
-  function renderMarkdown(div, rawMarkdown) {
+  function renderMarkdown(div, rawMarkdown, isExport) {
     div.html(marked(rawMarkdown));
     div.find('a').attr('target', '_blank');
     div.find('a[href^="#"]').attr('target', null);
+    if (isExport) {
+      div.find('a[href^="#"]').each(function (i, x) {
+        $(x).attr('href', $(x).attr('href').replace(/^#/, '') + '.html');
+      });
+    }
     div.find('table').wrap('<div class=table-wrapper></div>');
   }
 
@@ -465,29 +502,21 @@ $(function() {
   }
 
   function saveNote(callBack) {
-    if (!checkChange()) return;
     var note = getCurrentNote();
     var data = {action: 'save', content: myCodeMirror.getValue()};
     $.post('/note/' + note.nid, data, function (data) {
       showMessage('Saved!');
       if (typeof callBack === 'function') {
-        callBack();
+        callBack(data);
       }
     }).fail(showError);
-    if (typeof callBack !== 'function') {
-      displayNote({raw: data.content}, {
-        keepEditor: true,
-        oldScrollRatio: getScrollRatio()
-      });
-    }
+    displayNote({raw: data.content}, {
+      keepEditor: true,
+      oldScrollRatio: getScrollRatio()
+    });
   }
 
   $('#editor-save').button().click(saveNote);
-
-  $('#editor-export').button().click(function () {
-    saveNote();
-    window.open('/note/' + getCurrentNote().nid, '_blank');
-  });
 
   //================================================================
   // Layout / Resize
@@ -556,6 +585,7 @@ $(function() {
         matchBrackets: true,
         extraKeys: {
           'Ctrl-S': saveNote,
+          'Shift-Ctrl-S': exportNote,
           'Ctrl-B': bolden,
           'Ctrl-I': italicize,
           'Ctrl-`': codify,

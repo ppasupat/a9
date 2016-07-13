@@ -9,6 +9,7 @@ class Model(object):
     WHITESPACE = re.compile(r"\s+", re.MULTILINE)
 
     def __init__(self, basedir, paranoid=True):
+        self.basedir = basedir
         self.datadir = os.path.join(basedir, 'data')
         # run_simple runs with 1 thread and 1 process, but for safety ...
         self.lock = RLock()
@@ -198,21 +199,20 @@ class Model(object):
 
     def get_note_content(self, nid):
         with self.lock:
-            #if self.paranoid:
-            #    books, notes = self._read_names()
-            #    if nid not in notes:
-            #        raise ForbiddenOperationError("Note %d not found" % nid)
             with open(self._get_note_path(nid), 'r', 'utf8') as fin:
                 return fin.read()
 
     def save_note_content(self, nid, content):
         with self.lock:
-            #if self.paranoid:
-            #    books, notes = self._read_names()
-            #    if nid not in notes:
-            #        raise ForbiddenOperationError("Note %d not found" % nid)
             with open(self._get_note_path(nid), 'w', 'utf8') as fout:
                 fout.write(content)
+
+    def export_note(self, nid, **kwargs):
+        template_path = os.path.join(self.basedir, 'viewer', 'template')
+        output_path = os.path.join(self.basedir, 'viewer', str(nid) + '.html')
+        with open(template_path, 'r', 'utf8') as fin:
+            with open(output_path, 'w', 'utf8') as fout:
+                fout.write(fin.read().format(nid=nid, **kwargs))
 
 ################
 # Exceptions
@@ -232,4 +232,3 @@ class ForbiddenOperationError(Exception):
         self.value = value
     def __str__(self):
         return repr(self.value)
-

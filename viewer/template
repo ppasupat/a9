@@ -7,30 +7,19 @@
   <link rel="stylesheet" type="text/css" href="static/viewer-style.css" />
   <link rel="stylesheet" type="text/css" href="static/content-style.css" />
   <link rel="stylesheet" type="text/css" href="static/print-style.css" media="print" />
-  <script type="text/javascript" src="static/jquery.min.js"></script>
-  <script type="text/javascript" src="static/marked.js"></script>
-  <script type="text/javascript" src="static/svg-hack.js"></script>
   <script type="text/javascript" src="static/mathjax/MathJax.js?config=local"></script>
-  <script type="text/javascript" src="static/viewer-main.js"></script>
-  <title>a9</title>
+  <title>{name}</title>
   <link type="image/x-icon" rel="shortcut icon" href="static/icons/favicon-pad.png">
 </head>
 
 <body>
   <div id="wrapper">
-    <div id="content-frame" class="hidden">
-      <div id="content-name"></div>
-      <div id="content"></div>
-      <div id="content-time"></div>
-    </div>
-    <div id="cover" class="hidden unselectable">
-      <div id="nonote" class="centerize">(no note selected)</div>
-      <div id="loading" class="centerize">... loading ...</div>
-    </div>
-    <div id="error" class="hidden"> 
-      <p>
-        <strong>ERROR:</strong> <span id="error-message"></span>
-      </p>
+    <div id="content-frame">
+      <div id="content-name" title="{name}">{name}</div>
+      <div id="content">
+{content}
+      </div>
+      <div id="content-time">Exported: {time}</div>
     </div>
   </div>
 </body>

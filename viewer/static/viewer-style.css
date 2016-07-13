@@ -1,0 +1,61 @@
+/*================================================================
+  Reset */
+
+body {
+  position: absolute;
+  font-family: Liberation Sans, Arial, DejaVu Sans, Sans, sans-serif;
+  width: 100%;
+}
+
+body, #cover {
+  background-color: #EAEAEA;
+}
+
+/*================================================================
+  Common Formatting */
+
+.hidden {display: none;}
+.selected {background-color: #DEF;}
+.centerize {text-align: center; margin: 0 auto;}
+.unselectable {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: default;
+}
+strong {font-weight: bold;}
+
+/*================================================================
+  Layout */
+
+#content-frame {
+  max-width: 720px;
+  margin: 1em auto;
+  padding: 1em 10px;
+}
+
+@media (max-width: 600px) {
+  #content-frame {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+#content-name {
+  font-size: 30px;
+  padding: 15px 15px 10px;
+  color: #223;
+  font-weight: bold;
+  line-height: 1.2em;
+}
+
+#content-time {
+  text-align: right;
+  font-size: 10px;
+  margin-right: 10px;
+  padding-bottom: 10px;
+}

@@ -15,6 +15,16 @@ def init_directories():
             fout.write('B\t0\tUnsorted Notes\n')
         print >> sys.stderr, 'Created "data/notes" file'
 
+HTML_ESCAPES = {
+    '&': '&amp;',
+    '"': '&quot;',
+    "'": "&apos;",
+    '>': '&gt;',
+    '<': '&lt;',
+    }
+def escape(text):
+    return ''.join(HTML_ESCAPES.get(c,c) for c in text)
+
 ################################
 # Static files
 
@@ -33,6 +43,10 @@ def server_static(p):
 @app.route('/uploads/<p:path>')
 def server_static(p):
     return static_file(os.path.join('uploads', p), root=BASEDIR)
+
+@app.route('/viewer/<p:path>')
+def server_static(p):
+    return static_file(os.path.join('viewer', p), root=BASEDIR)
 
 ################################
 # Responses
@@ -169,6 +183,11 @@ def post_note(nid):
     elif action == 'move':
         dest = int(request.forms.dest)
         return yay(get_names(loaded_list=MODEL.move_note(nid, dest)))
+    elif action == 'export':
+        name = request.forms.name
+        content = request.forms.content
+        return MODEL.export_note(nid, name=escape(name),
+                content=content, time=datetime.datetime.now().isoformat())
     else:
         raise ForbiddenOperationError("Unknown action %s" % action)
 
