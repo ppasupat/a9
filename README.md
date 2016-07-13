@@ -34,4 +34,4 @@ Python 2.7 and a modern browser (i.e., not IE <= 8)
 Setup
 -----
 
-Run `server.py` either by double-clicking the icon or invoking through a terminal.
+Run `a9-server.py` either by double-clicking the icon or invoking through a terminal.
