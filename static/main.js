@@ -25,10 +25,19 @@ $(function() {
       bidMap[book.bid] = $('<div>').text(book.name).attr('title', book.name)
         .addClass('book-choice choice cutoff')
         .droppable({
-          accept: '.note-choice',
+          accept: function (draggable) {
+            if (!$(draggable).hasClass('note-choice')) return false;
+            var offset = $(this).offset().top,
+                height = $(this).outerHeight(),
+                parentOffset = $('#booklist').offset().top,
+                parentHeight = $('#booklist').innerHeight();
+            return (offset + height > parentOffset &&
+                    offset < parentOffset + parentHeight);
+          },
           activeClass: 'ui-state-default',
           hoverClass: 'ui-state-hover',
           drop: function(event, ui) {
+            if ($(this).hasClass('selected')) return;
             moveNote(ui.draggable.data('info').nid, book.bid);
           }
         })
@@ -66,8 +75,9 @@ $(function() {
         .addClass('note-choice choice cutoff')
         .draggable({
           appendTo: 'body',
-          helper: 'clone',
-          delay: 500
+          helper: function () { return $('<img>').attr('src', 'static/icons/favicon-pad.png')[0]; },
+          delay: 50,
+          cursorAt: {'left': 18},
         })
         .data('info', note).appendTo('#notelist');
     });
@@ -592,14 +602,17 @@ $(function() {
           'Ctrl-L': linkify,
           'Ctrl-/': superLinkify,
           'Shift-Ctrl-6': supify,
+          'Ctrl-.': supify,
           'Shift-Ctrl--': subify,
+          'Ctrl-,': subify,
           'Shift-Ctrl-B': bulletify,
+          'Shift-Ctrl-8': bulletify,
           'Ctrl-A': alchemy,
+          'Ctrl-\'': addCitation,
           'Tab': 'indentMore',
           'Shift-Tab': 'indentLess',
           'Home': 'goLineLeft',
           'End': 'goLineRight',
-          'Ctrl-W': function () {},   // Prevent accidental close
           'Alt-/': autoComplete,
           'Ctrl-N': autoComplete,
           'Ctrl-Alt-0': addPinyinTone0,
@@ -749,6 +762,14 @@ $(function() {
       if (ALCHEMY_KIT[ingredients] !== undefined) {
         myCodeMirror.replaceSelection(ALCHEMY_KIT[ingredients]);
       }
+    });
+  }
+
+  function addCitation() {
+    myCodeMirror.openDialog('Title / URL: <input type=text>', function (url) {
+      $.get('/cite', {'url': url}, function (response) {
+        myCodeMirror.replaceSelection('<cite>' + response.citation + '</cite>');
+      }).fail(showError);
     });
   }
 

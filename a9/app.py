@@ -196,6 +196,17 @@ def delete_note(nid):
     yay(get_names(loaded_list=MODEL.delete_note(nid)))
 
 ################################
+# Utility
+
+import cite_grabber
+
+@app.get('/cite')
+def cite():
+    url = request.query.url
+    citation = cite_grabber.grab(url)
+    return yay({"url": url, "citation": citation})
+
+################################
 # Entry Point
 
 def start(port, basedir):

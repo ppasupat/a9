@@ -15,7 +15,7 @@ body, #cover {
   Common Formatting */
 
 .hidden {display: none;}
-.selected {background-color: #DEF;}
+.selected {background-color: #CEF;}
 .centerize {text-align: center; margin: 0 auto;}
 .cutoff {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 .unselectable {
@@ -126,6 +126,7 @@ strong {font-weight: bold;}
 .choice {
   height: 1em;
   padding: 2px;
+  color: #222;
 }
 
 .list-toolbar {
@@ -133,17 +134,21 @@ strong {font-weight: bold;}
 }
 
 .list-toolbar .ui-button {
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .list-toolbar-title {
   font-size: 20px;
   font-weight: bold;
-  color: #555;
+  color: #CCC;
   position: absolute;
   top: 0;
   right: 0;
   z-index: -1;
+}
+
+.choice.ui-state-hover {
+  background-color: #CBE;
 }
 
 /*================================================================
@@ -156,7 +161,7 @@ strong {font-weight: bold;}
 #content-name {
   font-size: 20px;
   padding: 10px;
-  color: #606;
+  color: #537;
   font-weight: bold;
 }
 
@@ -182,11 +187,7 @@ strong {font-weight: bold;}
 }
 
 #editor-toolbar .ui-button {
-  font-size: 14px;
-}
-
-#editor-toolbar .ui-button-text {
-  padding: 3px 5px;
+  font-size: 12px;
 }
 
 #editor-lower-wrapper {
