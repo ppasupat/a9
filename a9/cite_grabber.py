@@ -28,7 +28,11 @@ def dblp_search(title):
     best_match = data['result']['hits']['hit'][0]['info']
     kwargs = {}
     if 'authors' in best_match:
-        kwargs['author'] = clean(best_match['authors']['author'][0])
+        authors = best_match['authors']['author']
+        if isinstance(authors, list):
+            kwargs['author'] = clean(authors[0])
+        else:   # Single author
+            kwargs['author'] = clean(authors)
     if 'venue' in best_match:
         kwargs['venue'] = clean(best_match['venue'])
     if 'year' in best_match:
@@ -38,6 +42,20 @@ def dblp_search(title):
     if 'url' in best_match:
         kwargs['url'] = clean(best_match['url'])
     return kwargs
+
+"http://dblp.org/rec/conf/emnlp/RitterCME11"
+def dblp_fetch(dblp_url):
+    if '/xml/' not in dblp_url:
+        xml_url = dblp_url.replace('/rec/', '/rec/xml/')
+    else:
+        xml_url = dblp_url
+    print >> sys.stderr, 'Grabbing DBLP information from', xml_url
+    data = urllib.urlopen(xml_url)
+    entry = ET.parse(data).getroot()[0]
+    ee = entry.find('ee')
+    if ee is not None:
+        return ee.text
+    return dblp_url
     
 ################################
 # Arxiv
@@ -70,20 +88,24 @@ def arxiv_fetch(url):
 def grab(url):
     if not url.startswith('http'):
         # Probably a title
+        title = url
         try:
-            kwargs = dblp_search(url)
+            kwargs = dblp_search(title)
+            kwargs['url'] = dblp_fetch(kwargs['url'])
             return format_citation(**kwargs)
         except Exception, e:
             print >> sys.stderr, 'Error:', e
         # Give up
-        return format_citation(title=url)
+        return format_citation(title=title)
     # Arxiv
-    if url.startswith('http://arxiv.org'):
+    if (url.startswith('http://arxiv.org') or 
+            url.startswith('https://arxiv.org')):
         try:
             kwargs = arxiv_fetch(url)
             # Try cross-search with DBLP
             try:
                 dblp_kwargs = dblp_search(kwargs['title'])
+                kwargs['url'] = url
                 return format_citation(**dblp_kwargs)
             except Exception, e:
                 print >> sys.stderr, 'Error:', e

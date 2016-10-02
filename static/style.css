@@ -102,6 +102,31 @@ strong {font-weight: bold;}
   width: 50%;
 }
 
+@media (max-width: 800px) {
+  #sidebar-wrapper {
+    left: 0;
+    width: 45%;
+    width: calc(45% - 10px);
+  }
+  #sidebar-toggler {
+    left: 45%;
+    left: calc(45% - 10px);
+    width: 10px;
+  }
+  #content-wrapper {
+    left: 45%;
+    width: 55%;
+  }
+  #editor-wrapper {
+    display: none;
+  }
+  .hide-sidebar #editor-wrapper {
+    display: block;
+    left: 50%;
+    width: 50%;
+  }
+}
+
 #booklist-wrapper {
   top: 0;
   height: 40%;
@@ -207,6 +232,12 @@ strong {font-weight: bold;}
   left: 16%;
   width: 84%;
   z-index: 5;
+}
+@media (max-width: 800px) {
+  #cover {
+    left: 45%;
+    width: 55%;
+  }
 }
 
 #cover div {
