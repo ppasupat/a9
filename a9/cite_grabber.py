@@ -15,7 +15,7 @@ def clean(x):
     return x
 
 def format_citation(author='?', affiliation='?', venue='?', year='?', title='?', url='?'):
-    return '({} @ {}, {} {}) [{}]({})'.format(
+    return u'({} @ {}, {} {}) [{}]({})'.format(
             author, affiliation, venue, year, title, url)
 
 ################################
