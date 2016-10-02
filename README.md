@@ -63,5 +63,9 @@ Keyboard shortcuts can be modified in `static/main.js`
 | **— Insert —** | |
 | Ctrl-H | Insert Horizontal Line |
 | Ctrl-N **or** Alt-/ | Auto-complete<sup>1</sup> |
-| Ctrl-A | Alchemy (Compose)<sup>2</sup> |
-| Ctrl-' | Citation |
+| Ctrl-A | Insert Symbol<sup>2</sup> |
+| Ctrl-' | Insert Citation |
+
+<sup>1</sup> Based on words in the same document
+
+<sup>2</sup> See `static/alchemy.js`. For example, entering `inf` gives ∞.
