@@ -62,7 +62,7 @@ Keyboard shortcuts can be modified in `static/main.js`
 | Ctrl-Alt-[0-5] | Add Pinyin Tone: lv → lv/lǖ/lǘ/lǚ/lǜ/lü |
 | **— Insert —** | |
 | Ctrl-H | Insert Horizontal Line |
-| Ctrl-N **or** Alt-/ | Auto-complete<sup>1</sup> |
+| Alt-/ | Auto-complete<sup>1</sup> |
 | Ctrl-A | Insert Symbol<sup>2</sup> |
 | Ctrl-' | Insert Citation |
 
