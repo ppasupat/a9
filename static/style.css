@@ -224,6 +224,9 @@ strong {font-weight: bold;}
   background-color: #FCFEFF;
   border: 1px solid #DDD;
 }
+.CodeMirror-lines {
+  padding-bottom: 60%;  /* Prevent neck pain */
+}
 
 /*================================================================
   Misc. */

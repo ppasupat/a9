@@ -105,7 +105,7 @@ def grab(url):
             # Try cross-search with DBLP
             try:
                 dblp_kwargs = dblp_search(kwargs['title'])
-                kwargs['url'] = url
+                dblp_kwargs['url'] = url
                 return format_citation(**dblp_kwargs)
             except Exception, e:
                 print >> sys.stderr, 'Error:', e

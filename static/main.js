@@ -438,6 +438,7 @@ $(function() {
         $('title').text('a9');
       } else {
         // Loading
+        $('.rendering').remove();
         $('#content-frame').prepend($('<div class=rendering>Loading ...</div>'));
         $.get('/note/' + note.nid, function (data) {
           displayNote(data, {quick: true});
