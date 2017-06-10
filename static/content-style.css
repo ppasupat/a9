@@ -93,6 +93,9 @@
   display: none;
   border: 1px dashed #AAB;
 }
+#content-frame.editor-preview #content div.spoiler {
+  display: block;
+}
 
 /*================================================================
   Texts */

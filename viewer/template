@@ -8,6 +8,7 @@
   <link rel="stylesheet" type="text/css" href="static/content-style.css" />
   <link rel="stylesheet" type="text/css" href="static/print-style.css" media="print" />
   <script type="text/javascript" src="static/mathjax/MathJax.js?config=local"></script>
+  <script type="text/javascript" src="static/spoiler.js"></script>
   <title>{name}</title>
   <link type="image/x-icon" rel="shortcut icon" href="static/icons/favicon-pad.png">
 </head>
