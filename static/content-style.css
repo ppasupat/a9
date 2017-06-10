@@ -9,7 +9,14 @@
   border-top: 1px solid transparent;
   border-bottom: 1px solid transparent;
   color: #222;
-  padding-bottom: 60%;
+}
+
+#content-frame.editor-preview {
+  background-color: transparent;
+}
+#content-frame.editor-preview #content {
+  background-color: #FCFEFF;
+  margin-bottom: 50%;
 }
 
 /*================================================================
@@ -80,6 +87,11 @@
   border: 0;
   background-color: #CCCCCF;
   height: 1px;
+}
+
+#content div.spoiler {
+  display: none;
+  border: 1px dashed #AAB;
 }
 
 /*================================================================

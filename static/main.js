@@ -497,7 +497,7 @@ $(function() {
   // Return the fraction form to prevent division by 0
   function getScrollRatio() {
     var upperScroll = $('#content-frame').scrollTop(),
-        lowerScroll = $('#content').outerHeight() -
+        lowerScroll = $('#content').outerHeight(true) -
           $('#content-frame').innerHeight() - upperScroll;
     if (lowerScroll <= 0) {
       return [1, 0];    // Default: scroll to bottom if possible
@@ -508,7 +508,7 @@ $(function() {
 
   function scrollDisplay(scrollRatio) {
     $('#content-frame').scrollTop(Math.max(0,
-        ($('#content').outerHeight() - $('#content-frame').innerHeight())
+        ($('#content').outerHeight(true) - $('#content-frame').innerHeight())
         * scrollRatio[0] * 1. / (scrollRatio[0] + scrollRatio[1])));
   }
 

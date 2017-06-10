@@ -182,6 +182,7 @@ window.SVGHack = (function () {
    - fill: fill color
    - name: name for future reference
    - text: node text
+   - align: text alignment
    */
   function createNode(elt, nodes, type) {
     elt = $(elt);
@@ -194,6 +195,7 @@ window.SVGHack = (function () {
       type: elt.attr('type') || type || 'circle',
       name: elt.attr('name'),
       text: elt.attr('text'),
+      align: elt.attr('align') || 'center',
       o: S('<g>')
     };
     if (!node.r) {
@@ -236,14 +238,22 @@ window.SVGHack = (function () {
     }
     // Label
     if (node.text) {
+      var textX = - node.w / 2, textAlign = 'center';
+      if (node.align === 'left') {
+        textX = 0;
+        textAlign = 'left';
+      } else if (node.align == 'right') {
+        textX = - node.w;
+        textAlign = 'right';
+      }
       node.o.append(S('<foreignObject>', {
-        'x': - node.w / 2,
+        'x': textX,
         'y': - node.h / 2,
         'width': node.w,
         'height': node.h
       }).append($('<div>').css({
         'line-height': '' + node.h + 'px',
-        'text-align': 'center'
+        'text-align': textAlign,
       }).html(node.text)));
     }
     // Update
