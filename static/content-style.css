@@ -39,9 +39,8 @@
 #content h1 {
   font-size: 1.5em;
   font-weight: bold;
-  background-color: #AEE;
+  background-color: #CEE;
   text-align: center;
-  border: 1px solid #7BB;
   padding: 5px;
   margin: 0.8em 15px;
   border-radius: 3px;
@@ -96,6 +95,10 @@
 #content-frame.editor-preview #content div.spoiler {
   display: block;
 }
+#content div.spoiler-button-wrapper {
+  text-align: center;
+  margin: 1em;
+}
 
 /*================================================================
   Texts */
@@ -110,11 +113,10 @@
 
 #content strong em {
   background-color: #CEE;
-  border: 1px solid #ADD;
   font-style: normal;
   padding: 1px 3px;
   border-radius: 2px;
-  margin: 0 2px;
+  margin: 1px 2px;
 }
 
 #content a {
@@ -126,8 +128,8 @@
 }
 
 #content code, #content tt, #content pre {
-  background-color: #F9F2F4;
-  color: #B25;
+  background-color: #EEE;
+  color: #555;
   font-size: 100%;
   font-family: Liberation Mono, Consolas, Menlo, Monaco, Lucida Console, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;
 }

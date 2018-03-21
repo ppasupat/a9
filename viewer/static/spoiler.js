@@ -8,7 +8,7 @@ window.addEventListener('load', function () {
     spolierBox.parentElement.insertBefore(wrapper, spolierBox);
     wrapper.appendChild(toggleWrapper);
     toggleWrapper.appendChild(toggleButton);
-    toggleWrapper.setAttribute('class', 'centerize');
+    toggleWrapper.setAttribute('class', 'spoiler-button-wrapper');
     toggleButton.innerHTML = 'Toggle Spoiler';
     wrapper.appendChild(spolierBox);
     toggleButton.onclick = function () {

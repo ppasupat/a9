@@ -8,7 +8,7 @@ body {
 }
 
 body, #cover {
-  background-color: #E5E5E5;
+  background-color: #EEE;
 }
 
 /*================================================================
@@ -141,7 +141,6 @@ strong {font-weight: bold;}
   Sidebar */
 
 .list {
-  border: 1px solid #DDD;
   cursor: default;
   overflow-y: auto;
   font-size: 90%;
@@ -191,7 +190,6 @@ strong {font-weight: bold;}
 }
 
 #content-frame {
-  border: 1px solid #DDD;
   overflow-y: scroll;
 }
 
@@ -222,7 +220,6 @@ strong {font-weight: bold;}
 .CodeMirror {
   font-family: monospace;
   background-color: #FCFEFF;
-  border: 1px solid #DDD;
 }
 .CodeMirror-lines {
   padding-bottom: 60%;  /* Prevent neck pain */

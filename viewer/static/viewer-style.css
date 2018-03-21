@@ -3,12 +3,12 @@
 
 body {
   position: absolute;
-  font-family: Liberation Sans, Arial, DejaVu Sans, Sans, sans-serif;
+  font-family: Arial, Liberation Sans, DejaVu Sans, Sans, sans-serif;
   width: 100%;
 }
 
 body, #cover {
-  background-color: #EAEAEA;
+  background-color: #F5F5F5;
 }
 
 /*================================================================
