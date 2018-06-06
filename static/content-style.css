@@ -1,5 +1,5 @@
 #content-frame {
-  background-color: #FCFEFF;
+  background-color: #FAFAFA;
 }
 
 #content {
@@ -8,7 +8,7 @@
   /* These will make the scrolling correct */
   border-top: 1px solid transparent;
   border-bottom: 1px solid transparent;
-  color: #222;
+  color: #404040;
 }
 
 #content-frame.editor-preview {
@@ -39,7 +39,7 @@
 #content h1 {
   font-size: 1.5em;
   font-weight: bold;
-  background-color: #CEE;
+  background-color: #DEE;
   text-align: center;
   padding: 5px;
   margin: 0.8em 15px;
@@ -112,7 +112,7 @@
 }
 
 #content strong em {
-  background-color: #CEE;
+  background-color: #DEE;
   font-style: normal;
   padding: 1px 3px;
   border-radius: 2px;
