@@ -4,11 +4,11 @@
 
 #content {
   font-size: 14px;
-  font-family: "Liberation Sans", Arial, sans-serif;
+  font-family: Arial, "Liberation Sans", sans-serif;
   /* These will make the scrolling correct */
   border-top: 1px solid transparent;
   border-bottom: 1px solid transparent;
-  color: #404040;
+  color: #333;
 }
 
 #content-frame.editor-preview {
@@ -17,6 +17,7 @@
 #content-frame.editor-preview #content {
   background-color: #FCFEFF;
   margin-bottom: 50%;
+  min-height: 100%;
 }
 
 /*================================================================

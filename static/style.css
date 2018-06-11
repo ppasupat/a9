@@ -3,7 +3,7 @@
 
 body {
   position: absolute;
-  font-family: Liberation Sans, Arial, DejaVu Sans, Sans, sans-serif;
+  font-family: Arial, "Liberation Sans", sans-serif;
   width: 100%;
 }
 
@@ -150,7 +150,7 @@ strong {font-weight: bold;}
 .choice {
   height: 1em;
   padding: 2px;
-  color: #222;
+  color: #333;
 }
 
 .list-toolbar {
@@ -316,4 +316,8 @@ div.rendering {
 
 .ui-state-default, .ui-state-hover {
   border: none !important;
+}
+
+.ui-widget-overlay {
+  opacity: .3;
 }
