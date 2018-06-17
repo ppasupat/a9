@@ -96,7 +96,7 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
   TEX.Macro("covv", "\\operatorname{Cov}_{#1}[ #2 ]", 2, "");
   TEX.Macro("choose", "{\\binom{#1}{#2}}", 2);
   TEX.Macro("matx", "\\crab{\\,\\begin{matrix}#1\\end{matrix}\\,}", 1);
-  TEX.Macro("trps", "^\\mathrm{T}");
+  TEX.Macro("trps", "^\\top");
   TEX.Macro("amor", "\\widehat{#1}", 1);
   TEX.Macro("cases", "\\left\\{ \\begin{array}{ll}#1\\end{array}\\right.", 1);
   TEX.Macro("cif", "\\mbox{if $#1$}", 1);
@@ -104,6 +104,7 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
   TEX.Macro("cotherw", "\\mbox{otherwise}");
   TEX.Macro("Re", "\\operatorname{Re}");
   TEX.Macro("Im", "\\operatorname{Im}");
+  TEX.Macro("ReLU", "\\operatorname{ReLU}");
   
   TEX.Macro("i", "^{(i)}");
   TEX.Macro("j", "^{(j)}");

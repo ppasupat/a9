@@ -12,12 +12,11 @@
 }
 
 #content-frame.editor-preview {
-  background-color: transparent;
+  background-color: #FCFEFF;
 }
 #content-frame.editor-preview #content {
   background-color: #FCFEFF;
   margin-bottom: 50%;
-  min-height: 100%;
 }
 
 /*================================================================
@@ -64,9 +63,9 @@
 }
 
 #content blockquote {
-  margin: 0 15px;
-  padding-left: 10px;
-  border-left: 2px solid #AAA;
+  margin: 8px 15px;
+  padding: 1px 0 1px 10px;
+  border-left: 2px solid #DDE;
   background-color: rgba(210, 240, 240, 0.25);
 }
 
@@ -79,7 +78,7 @@
 }
 
 #content blockquote li blockquote {
-  margin-left: 0;
+  margin-left: -10px;
 }
 
 #content hr {
@@ -117,6 +116,7 @@
   font-style: normal;
   padding: 1px 3px;
   border-radius: 2px;
+  border: 1px solid #D2E2E2;
   margin: 1px 2px;
 }
 
@@ -211,7 +211,7 @@
 #content td, #content th { 
   display: table-cell;
   padding: 3px 8px;
-  border: 1px solid #BBA;
+  border: 1px solid #CCB;
 }
 
 #content th {
@@ -224,7 +224,7 @@
   background-color: #FFF;
 }
 #content tr:nth-child(odd) {
-  background-color: #EFF;
+  background-color: #F5FCFF;
 }
 
 /*================================================================

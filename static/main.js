@@ -470,6 +470,11 @@ $(function() {
     div.html(marked(rawMarkdown));
     div.find('a').attr('target', '_blank');
     div.find('a[href^="#"]').attr('target', null);
+    div.find('img').each(function (i, x) {
+      if ($(x).attr('alt')) {
+        $(x).attr('title', $(x).attr('alt'));
+      }
+    });
     if (isExport) {
       div.find('a[href^="#"]').each(function (i, x) {
         $(x).attr('href', $(x).attr('href').replace(/^#/, '') + '.html');
