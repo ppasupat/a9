@@ -842,7 +842,17 @@ $(function() {
         selectSwitchNote($(this).data('book').bid, $(this).data('note').nid);
         switcher.dialog('close');
     }));
-}
+  }
+
+
+    $(document).keydown(
+        function(e) {
+            if (e.ctrlKey && (e.keyCode || e.which) == 75) {
+                e.preventDefault();
+                launchSwitcher();
+            }
+        }
+    );
 
   // f(content) -> new content
   function manupulateSelectedLinesFunction(f) {
