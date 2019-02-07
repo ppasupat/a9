@@ -1,6 +1,6 @@
 $(function() {
-  
-  var myCodeMirror, changeCountdown = null, bookNoteList, bidMap, nidMap;
+
+  var myCodeMirror, changeCountdown = null, bookNoteList, bidMap, nidMap, sMap;
   var AUTO_UPDATE_INTERVAL = 1000;
 
   //================================================================
@@ -140,8 +140,10 @@ $(function() {
           if ((e.keyCode || e.which) === 13) {
             dialog.dialog('close');
             submit.fn(dialog.data('args'), input.val());
-          }
+          } 
         }).appendTo(rightPane);
+    } else if (type === 'switch') {
+        dialog.addClass('dialog-switch');
     } else if (type === 'confirm') {
       dialog.addClass('dialog-confirm');
     } else if (type === 'alert') {
@@ -174,6 +176,139 @@ $(function() {
     dialog.dialog('option', 'buttons', buttons);
 
     DIALOGS[title] = dialog;
+  }
+
+  var switcher = null;
+  function buildSwitcher() {
+    if (switcher == null) {
+      var dialog = $('<div>').dialog({
+        autoOpen: false,
+        modal: true,
+        title: 'Note Switcher',
+        width: 420,
+        height: 400
+      });
+      
+      input = $('<input type="text" class="dialog-input"><br/><br/>')
+        .keyup(function (e) {
+          if ((e.keyCode || e.which) == 40) {
+            // down arrow key
+            selectedItem = dialog.find('.selected');
+            nextItem = selectedItem.next();
+            if ( nextItem.hasClass('switch-book') ) {
+              highlightSwitchBook(nextItem.data('book').bid);
+            } else if ( nextItem.hasClass('switch-note') ) {
+              highlightSwitchNote(nextItem.data('book').bid, nextItem.data('note').nid);
+            }
+          } else if ((e.keyCode || e.which) == 38) {
+            // up arrow key
+            selectedItem = dialog.find('.selected');
+            prevItem = selectedItem.prev();
+            if ( prevItem.hasClass('switch-book') ) {
+              highlightSwitchBook(prevItem.data('book').bid);
+            } else if ( prevItem.hasClass('switch-note') ) {
+              highlightSwitchNote(prevItem.data('book').bid, prevItem.data('note').nid);
+            }
+          } else if ((e.keyCode || e.which) == 13) {
+            // enter key
+            selectedItem = dialog.find('.selected');
+            if ( selectedItem.hasClass('switch-book') ) {
+              selectSwitchBook(selectedItem.data('book').bid);
+            } else if ( selectedItem.hasClass('switch-note') ) {
+              selectSwitchNote(selectedItem.data('book').bid,
+                       selectedItem.data('note').nid);
+            }
+            dialog.dialog('close');
+          } else {
+            repopulateSwitcher(input.val());
+          }
+        }).appendTo(dialog);
+      
+      var booklist = $('<div id="dialoglist" class="list">').appendTo(dialog);
+      
+      switcher = dialog;
+    }
+    
+    repopulateSwitcher("");
+  }
+
+  function highlightBook(bid, nid) {
+    $('.book-choice').removeClass('selected');
+    bidMap[bid].addClass('selected');
+  }
+  
+  function repopulateSwitcher(partialTitle) {
+    // get books (and notes) with partial title
+    $('#dialoglist').empty();
+    sMap = {};
+    var curBook = getCurrentBook();
+    var curNote = getCurrentNote();
+
+    var noteInList = false;
+    
+    bookNoteList.books.forEach(function (book) {
+      if (book.name.toLowerCase().match(partialTitle.toLowerCase())) {
+        sMap[book.bid] = $('<div>').text(book.name).attr('title', book.name)
+          .addClass('switch-choice switch-book choice cutoff')
+          .data('book', book).appendTo('#dialoglist');
+      }
+
+      if (partialTitle === '') {
+        // wait for some text
+        return;
+      }
+
+      // Also append the notes in the book if we have some more search information
+      book.notes.forEach(function (note) {
+        if (note.name.toLowerCase().match(partialTitle.toLowerCase())) {
+          sMap[note.nid] = $('<div>').text('# ' + note.name).attr('title', note.name)
+            .addClass('switch-choice switch-note choice cutoff')
+            .data('note', note).data('book', book).appendTo('#dialoglist');
+          
+          if (note.nid === curNote.nid) {
+            noteInList = true;
+          }
+        }
+      });
+    });
+
+    if (noteInList === true) {
+      highlightSwitchNote(curBook.bid, curNote.nid);
+    } else {
+      firstItem = switcher.find('#dialoglist').find('.choice').first();
+      if ( firstItem.hasClass('switch-book') ) {
+        highlightSwitchBook(firstItem.data('book').bid);
+      } else if ( firstItem.hasClass('switch-note') ) {
+        highlightSwitchNote(firstItem.data('book').bid, firstItem.data('note').nid);
+      } else {
+        console.log(firstItem);
+      }
+    }
+  }
+
+  function highlightSwitchBook(bid) {
+      $('.switch-choice').removeClass('selected');
+      sMap[bid].addClass('selected');
+  }
+
+  function selectSwitchBook(bid) {
+      highlightSwitchBook(bid);
+      selectBook(bid);
+  }
+
+  function highlightSwitchNote(bid, nid) {
+      $('.switch-choice').removeClass('selected');
+      sMap[nid].addClass('selected');
+  }
+
+  function selectSwitchNote(bid, nid) {
+      highlightSwitchNote(bid, nid);
+      selectBook(bid);
+      selectNote(nid);
+  }
+    
+  function openSwitcher() {
+      switcher.dialog('open');
   }
 
   function openDialog(title, texts, args, defaultText) {
@@ -588,7 +723,7 @@ $(function() {
   //================================================================
   // Editor
 
-  function initializeCodeMirror() {
+    function initializeCodeMirror() {
     myCodeMirror = CodeMirror(
       document.getElementById('editor-lower-wrapper'), {
         mode: {
@@ -626,7 +761,8 @@ $(function() {
           'Ctrl-Alt-2': addPinyinTone2,
           'Ctrl-Alt-3': addPinyinTone3,
           'Ctrl-Alt-4': addPinyinTone4,
-          'Ctrl-Alt-5': addPinyinTone5
+          'Ctrl-Alt-5': addPinyinTone5,
+          'Ctrl-K': launchSwitcher,
         }
       });
     myCodeMirror.on('changes', setCountdown);
@@ -692,6 +828,31 @@ $(function() {
   var superLinkify = formatFunction('[', ']', formatFunction('(', ')'));
   var supify = formatFunction('<sup>', '</sup>');
   var subify = formatFunction('<sub>', '</sub>');
+
+  function launchSwitcher() {
+    buildSwitcher();
+    openSwitcher();
+    
+    $('#dialoglist').on('click', '.switch-book', confirmAction(function () {
+        selectSwitchBook($(this).data('book').bid);
+        switcher.dialog('close');
+    }));
+
+    $('#dialoglist').on('click', '.switch-note', confirmAction(function () {
+        selectSwitchNote($(this).data('book').bid, $(this).data('note').nid);
+        switcher.dialog('close');
+    }));
+  }
+
+
+    $(document).keydown(
+        function(e) {
+            if (e.ctrlKey && (e.keyCode || e.which) == 75) {
+                e.preventDefault();
+                launchSwitcher();
+            }
+        }
+    );
 
   // f(content) -> new content
   function manupulateSelectedLinesFunction(f) {
