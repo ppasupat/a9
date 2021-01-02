@@ -28,6 +28,8 @@ def main():
       if tokens[0] == 'B':
         name = tokens[2]
         norm_name = normalize(name)
+        while norm_name in books.values():
+          norm_name += '-alt'
         books[tokens[1]] = norm_name
         os.makedirs(os.path.join(BASEDIR, norm_name), exist_ok=True)
       else:
@@ -43,6 +45,8 @@ def main():
         print(book, '/', norm_name, '|||', index, '|||', title)
         src_file = os.path.join('data', nid + '.md')
         tgt_file = os.path.join(BASEDIR, book, norm_name + '.md')
+        while os.path.exists(tgt_file):
+          tgt_file = tgt_file + '-alt.md'
         with open(src_file) as fin:
           with open(tgt_file, 'w') as fout:
             print('<!-- ' + json.dumps({
