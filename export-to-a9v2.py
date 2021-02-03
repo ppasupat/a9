@@ -19,6 +19,14 @@ def normalize(name):
   return name
 
 
+def format_content(content):
+  # KaTeX uses aligned instead
+  content = content.replace('align*', 'aligned')
+  # Renamed the macro
+  content = content.replace(r'\trps', r'\T')
+  return content
+
+
 def main():
   # Read the names file
   books = {}
@@ -41,7 +49,7 @@ def main():
           index, title = m.groups()
         else:
           index, title = '', name
-        norm_name = normalize(title)
+        norm_name = normalize(name)
         print(book, '/', norm_name, '|||', index, '|||', title)
         src_file = os.path.join('data', nid + '.md')
         tgt_file = os.path.join(BASEDIR, book, norm_name + '.md')
@@ -54,7 +62,8 @@ def main():
               'title': title,
               'timestamp': 0,
             }) + ' -->', file=fout)
-            fout.write(fin.read())
+            content = format_content(fin.read())
+            fout.write(content)
 
 
 
