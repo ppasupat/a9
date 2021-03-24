@@ -2,6 +2,8 @@
 
 **a9** is an Evernote-style note-taking application.
 
+***UPDATE: [a9 VERSION 2 AVAILABLE HERE](https://github.com/ppasupat/a9v2)***
+
 ## Features
 
 With a9, you can ...
